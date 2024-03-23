@@ -93,6 +93,6 @@ public class Main {
         System.out.println(taskManager.getAllSubtatks());
 
 //        taskManager.clearAllSubtasks();
-        System.out.printlncd(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllEpics());
     }
 }
