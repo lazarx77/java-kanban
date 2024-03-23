@@ -81,8 +81,9 @@ public class Main {
         //обновляем epic2
         epic2.setTaskName("epic2_new_name");
         epic2.setDescription("epic2_description_new_description");
-        taskManager.updateEpic(6);
+        taskManager.updateEpic(6, epic2);
         System.out.println(taskManager.getAllEpics());
+        taskManager.getEpicSubtasks(epic2);
 
         //удаляем задачи
         taskManager.deleteSubtask(4);
@@ -92,7 +93,7 @@ public class Main {
         System.out.println(taskManager.getAllEpics());
         System.out.println(taskManager.getAllSubtatks());
 
-//        taskManager.clearAllSubtasks();
+        taskManager.clearAllSubtasks();
         System.out.println(taskManager.getAllEpics());
     }
 }

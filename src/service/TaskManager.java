@@ -112,12 +112,15 @@ public class TaskManager {
     }
 
     public void clearAllSubtasks() {
-        for (int id : epics.keySet()) {
-            Epic epic = new Epic();
-            epic.setStatus(TaskStatus.NEW);
+        for (int id : subtasks.keySet()) {
+            Subtask subtask = subtasks.get(id);
+            int epicId = subtask.getEpicId();
+            Epic epic = epics.get(epicId);
+            epic.clearSubtaskIds();
             subtasks.clear();
             subtasksIds.clear();
-            epics.put(id, epic);
+            epic.setStatus(TaskStatus.NEW);
+            epics.put(epicId, epic);
         }
     }
 
@@ -145,7 +148,7 @@ public class TaskManager {
         }
     }
 
-    public void updateSubTask(int id) {
+    public void updateSubTask(int id, Task task) {
         if (subtasks.containsKey(id)) {
             Subtask subtask = subtasks.get(id);
             subtasks.put(id, subtask);
@@ -154,9 +157,8 @@ public class TaskManager {
         }
     }
 
-    public void updateEpic(int id) {
+    public void updateEpic(int id, Epic epic) {
         if (epics.containsKey(id)) ;
-        Epic epic = epics.get(id);
         ArrayList<Integer> subtasksIds = epic.getSubtasksIds();
         setEpicStatus(id);
         epics.put(id, epic);

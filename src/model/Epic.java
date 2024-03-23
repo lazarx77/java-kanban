@@ -29,7 +29,7 @@ public class Epic extends Task {
 
         String result = "Epic{" +
                 "id='" + getId() + " " +
-                ", taskName='" + getTaskName(getId()) + " ";
+                ", taskName= " + getTaskName(getId()) + " ";
         if (getDescription() != null) {
             result = result + ", description.length=" + getDescription().length();
         } else {

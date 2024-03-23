@@ -17,7 +17,7 @@ public class Subtask extends Task {
 
         String result = "Subtask{" +
                 "id='" + getId() + " " +
-                ", taskName='" + getTaskName(getId()) + " ";
+                ", taskName= " + getTaskName(getId()) + " ";
         if (getDescription() != null) {
             result = result + ", description.length=" + getDescription().length();
         } else {
