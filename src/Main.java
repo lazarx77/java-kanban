@@ -37,7 +37,7 @@ public class Main {
         Subtask subtask1 = new Subtask();
         subtask1.setTaskName("subtask1");
         subtask1.setDescription("subtask1_description");
-        subtask1.setStatus(TaskStatus.DONE);
+        subtask1.setStatus(TaskStatus.NEW); // поменял значение статуса для тестирования
         subtask1.setEpicId(epic1.getId());
         subtask1 = taskManager.createNewSubtask(subtask1);
 
@@ -81,9 +81,9 @@ public class Main {
         //обновляем epic2
         epic2.setTaskName("epic2_new_name");
         epic2.setDescription("epic2_description_new_description");
-        taskManager.updateEpic(6, epic2);
+        taskManager.updateEpic(6);
         System.out.println(taskManager.getAllEpics());
-        taskManager.getEpicSubtasks(epic2);
+        System.out.println(taskManager.getEpicSubtasks(6));
 
         //удаляем задачи
         taskManager.deleteSubtask(4);
@@ -94,6 +94,12 @@ public class Main {
         System.out.println(taskManager.getAllSubtatks());
 
         taskManager.clearAllSubtasks();
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtatks());
+
+        taskManager.clearAll();
+        System.out.println(taskManager.getAllTasks());
+        System.out.println(taskManager.getAllSubtatks());
         System.out.println(taskManager.getAllEpics());
     }
 }
