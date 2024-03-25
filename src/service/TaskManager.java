@@ -5,7 +5,6 @@ import model.Subtask;
 import model.Task;
 import model.TaskStatus;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -14,7 +13,7 @@ public class TaskManager {
     private HashMap<Integer, Task> tasks;
     private HashMap<Integer, Subtask> subtasks;
     private HashMap<Integer, Epic> epics;
-    ArrayList<Integer> subtasksIds = new ArrayList<>();
+    private ArrayList<Integer> subtasksIds = new ArrayList<>();
 
     public TaskManager() {
         this.tasks = new HashMap<>();
