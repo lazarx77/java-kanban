@@ -7,6 +7,7 @@ import model.TaskStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
     private int id = 0;
@@ -14,11 +15,13 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Subtask> subtasks;
     private HashMap<Integer, Epic> epics;
     private ArrayList<Integer> subtasksIds = new ArrayList<>();
+    private List<Task> history; // список для хранения истории просмотров
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
         this.subtasks = new HashMap<>();
         this.epics = new HashMap<>();
+        history = new ArrayList<>(); // создаем список для хранения истории просмотров
     }
 
     // методы для создания задач
@@ -117,16 +120,35 @@ public class InMemoryTaskManager implements TaskManager {
     //остальные методы
     @Override
     public Task getTaskById(int id) {
+        if (history.size() < 10 ) {
+            history.add(tasks.get(id));
+        } else {
+            history.removeFirst();
+            history.add(tasks.get(id));
+        }
         return tasks.get(id);
+
     }
 
     @Override
     public Epic getEpicById(int id) {
+        if (history.size() < 10 ) {
+            history.add(epics.get(id));
+        } else {
+            history.removeFirst();
+            history.add(epics.get(id));
+        }
         return epics.get(id);
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
+        if (history.size() < 10 ) {
+            history.add(subtasks.get(id));
+        } else {
+            history.removeFirst();
+            history.add(subtasks.get(id));
+        }
         return subtasks.get(id);
     }
 
@@ -201,6 +223,11 @@ public class InMemoryTaskManager implements TaskManager {
             epicSubtasks.add(subtasks.get(subtasksIds));
         }
         return epicSubtasks;
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return history;
     }
 
     // вспомогательный метод для автоматической установки статуса эпиков
