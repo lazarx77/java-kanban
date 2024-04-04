@@ -94,4 +94,10 @@ public class TaskManagerTest {
         subtask5.setEpicId(epic4.getId());
     }
 
+    @Test
+    public void returnsTrueIfTasksInstancesAreEqualIfTheirIdsEqual() {
+
+    }
+
+
 }
