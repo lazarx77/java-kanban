@@ -3,6 +3,7 @@ import model.TaskStatus;
 import service.TaskManager;
 import model.Epic;
 import model.Subtask;
+import service.InMemoryTaskManager;
 
 public class Main {
     public static TaskManager taskManager;
@@ -23,7 +24,7 @@ public class Main {
         task2.setDescription("task2_description");
         task2.setStatus(TaskStatus.IN_PROGRESS);
 
-        taskManager = new TaskManager();
+        taskManager = new InMemoryTaskManager();
         task1 = taskManager.createNewTask(task1);
         task2 = taskManager.createNewTask(task2);
 
