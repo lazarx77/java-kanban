@@ -4,7 +4,6 @@ import service.HistoryManager;
 import service.TaskManager;
 import model.Epic;
 import model.Subtask;
-import service.InMemoryTaskManager;
 import service.Managers;
 
 public class Main {
@@ -28,7 +27,7 @@ public class Main {
         task2.setDescription("task2_description");
         task2.setStatus(TaskStatus.IN_PROGRESS);
 
-//        taskManager = new InMemoryTaskManager();
+
         taskManager = Managers.getDefault();
         task1 = taskManager.createNewTask(task1);
         task2 = taskManager.createNewTask(task2);
