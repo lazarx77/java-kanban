@@ -1,17 +1,21 @@
 import model.Task;
 import model.TaskStatus;
+import service.HistoryManager;
 import service.TaskManager;
 import model.Epic;
 import model.Subtask;
 import service.InMemoryTaskManager;
+import service.Managers;
 
 public class Main {
     public static TaskManager taskManager;
+    public static HistoryManager historyManager;
 
 
     public static void main(String[] args) {
         System.out.println("Поехали!");
 
+        historyManager = Managers.getDefaultHistory();
 
         // проверяем действия с обычными task
         Task task1 = new Task();
@@ -24,7 +28,8 @@ public class Main {
         task2.setDescription("task2_description");
         task2.setStatus(TaskStatus.IN_PROGRESS);
 
-        taskManager = new InMemoryTaskManager();
+//        taskManager = new InMemoryTaskManager();
+        taskManager = Managers.getDefault();
         task1 = taskManager.createNewTask(task1);
         task2 = taskManager.createNewTask(task2);
 
@@ -85,6 +90,15 @@ public class Main {
         taskManager.updateEpic(6);
         System.out.println(taskManager.getAllEpics());
         System.out.println(taskManager.getEpicSubtasks(6));
+
+        //
+
+
+        System.out.println("HISTORY MANAGER");
+        taskManager.getTaskById(1);
+        taskManager.getEpicById(3);
+        System.out.println(historyManager.getHistory());
+        System.out.println("!!!!!!!!!");
 
         //удаляем задачи
         taskManager.deleteSubtask(4);
