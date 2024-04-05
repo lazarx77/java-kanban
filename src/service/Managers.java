@@ -8,6 +8,7 @@ public final class Managers {
 
     public static TaskManager getDefault() {
         taskManager = new InMemoryTaskManager();
+        historyManager.clearHistory();
         return taskManager;
     }
 

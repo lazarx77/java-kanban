@@ -195,7 +195,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtatks() {
+    public ArrayList<Subtask> getAllSubtasks() {
         ArrayList<Subtask> subtasksList = new ArrayList<>();
         for (Subtask subtask : subtasks.values()) {
             subtasksList.add(subtask);
