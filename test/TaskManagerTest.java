@@ -329,22 +329,22 @@ public class TaskManagerTest {
 
     // убедитесь, что задачи, добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных
     @Test
-    public void historyShouldSavePreviousTaskAfterUpdate() {
+    public void historyShouldSavePreviousTaskFormAfterUpdate() {
         Task task1 = new Task(); // id 1
         task1.setTaskName("task1_name");
         task1.setDescription("task1_description");
         task1.setStatus(TaskStatus.NEW);
         task1 = taskManager.createNewTask(task1);
         taskManager.getTaskById(1);
-        List<Task> history1= historyManager.getHistory();
+        List<Task> history = historyManager.getHistory();
         task1.setTaskName("task1_name_updated");
         task1.setDescription("task1_description_updated");
         task1.setStatus(TaskStatus.IN_PROGRESS);
         taskManager.updateTask(1);
         taskManager.getTaskById(1);
-        List<Task> history2= historyManager.getHistory();
+
         assertEquals("[Task{id='1 , taskName= task1_name , description.length=17, status=NEW }, " +
                 "Task{id='1 , taskName= task1_name_updated , description.length=25, status=IN_PROGRESS }]",
-                history2.toString());
+                history.toString());
     }
 }

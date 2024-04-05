@@ -77,11 +77,21 @@ public class Main {
         System.out.println(taskManager.getAllEpics());
         System.out.println(taskManager.getAllSubtatks());
 
+        System.out.println("HISTORY MANAGER BEFORE UPDATE");
+        taskManager.getTaskById(1);
+        System.out.println(historyManager.getHistory());
+        System.out.println("!!!!!!!!!");
+
         //обновляем task1
         task1.setTaskName("task1_new_name");
         task1.setDescription("task1__new_description");
         task1.setStatus(TaskStatus.IN_PROGRESS);
         System.out.println(taskManager.getAllTasks());
+
+        System.out.println("HISTORY MANAGER after UPDATE");
+        taskManager.getTaskById(1);
+        System.out.println(historyManager.getHistory());
+        System.out.println("!!!!!!!!!");
 
         //обновляем epic2
         epic2.setTaskName("epic2_new_name");
