@@ -177,8 +177,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getAllTasks() {
-        ArrayList<Task> tasksList = new ArrayList<>();
+    public List<Task> getAllTasks() {
+        List<Task> tasksList = new ArrayList<>();
         for (Task task : tasks.values()) {
             tasksList.add(task);
         }
@@ -186,7 +186,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Epic> getAllEpics() {
+    public List<Epic> getAllEpics() {
         ArrayList<Epic> epicsList = new ArrayList<>();
         for (Epic epic : epics.values()) {
             epicsList.add(epic);
@@ -195,8 +195,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getAllSubtasks() {
-        ArrayList<Subtask> subtasksList = new ArrayList<>();
+    public List<Subtask> getAllSubtasks() {
+        List<Subtask> subtasksList = new ArrayList<>();
         for (Subtask subtask : subtasks.values()) {
             subtasksList.add(subtask);
         }
@@ -204,9 +204,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getEpicSubtasks(int id) {
+    public List<Subtask> getEpicSubtasks(int id) {
         Epic epic = epics.get(id);
-        ArrayList<Subtask> epicSubtasks = new ArrayList<>();
+        List<Subtask> epicSubtasks = new ArrayList<>();
         subtasksIds = epic.getSubtasksIds();
             for (int subtasksIds : subtasksIds) {
             epicSubtasks.add(subtasks.get(subtasksIds));
@@ -218,7 +218,7 @@ public class InMemoryTaskManager implements TaskManager {
     private void setEpicStatus(int id) {
         Epic epic = epics.get(id);
         subtasksIds = epic.getSubtasksIds();
-        ArrayList<TaskStatus> statusList = new ArrayList<>();
+        List<TaskStatus> statusList = new ArrayList<>();
         for (int subtaskId : subtasksIds) {
             Subtask subtask = subtasks.get(subtaskId);
             TaskStatus subTaskStatus = subtask.getStatus();
