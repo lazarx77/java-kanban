@@ -7,8 +7,6 @@ import model.TaskStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
 
 public class InMemoryTaskManager implements TaskManager {
     private int id = 0;
@@ -213,8 +211,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
         return epicSubtasks;
     }
-
-
 
     // вспомогательный метод для автоматической установки статуса эпиков
     private void setEpicStatus(int id) {

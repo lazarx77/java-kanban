@@ -1,12 +1,16 @@
 package model;
 import java.util.Objects;
-public class Task {
+public class Task implements Cloneable {
 
     private Integer id;
     private String taskName;
     private String description;
     private TaskStatus status;
 
+    @Override
+    public Task clone() throws CloneNotSupportedException {
+        return (Task)super.clone();
+    }
 
     @Override
     public String toString() {

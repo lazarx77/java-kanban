@@ -25,7 +25,7 @@ public class TaskManagerTest {
     public void beforeEach() {
         taskManager = Managers.getDefault();
         historyManager = Managers.getDefaultHistory();
-        // historyManager.clearHistory();
+
     }
 
     // проверьте, что экземпляры класса Task равны друг другу, если равен их id
@@ -362,8 +362,5 @@ public class TaskManagerTest {
                 "subtasksIds= [8]}, Subtask{id='12 , taskName= subtask5_name , description.length=20, status=NEW " +
                 "epicId = 10}]";
         assertEquals(subtask5String, historyManager.getHistory().toString());
-
-
-
     }
 }
