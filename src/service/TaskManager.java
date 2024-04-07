@@ -37,11 +37,11 @@ public interface TaskManager {
 
     void printAllTasks();
 
-    void updateTask(int id);
+    void updateTask(Task task);
 
-    void updateSubTask(int id);
+    void updateSubTask(Subtask subtask);
 
-    void updateEpic(int id);
+    void updateEpic(Epic epic);
 
     List<Task> getAllTasks();
 

@@ -255,12 +255,14 @@ public class TaskManagerTest {
         task1.setStatus(TaskStatus.NEW);
         task1 = taskManager.createNewTask(task1);
         taskManager.getTaskById(1);
-        List<Task> history = historyManager.getHistory();
-        task1.setTaskName("task1_name_updated");
-        task1.setDescription("task1_description_updated");
-        task1.setStatus(TaskStatus.IN_PROGRESS);
-        taskManager.updateTask(1);
+        Task task1Updated = new Task();
+        task1Updated.setTaskName("task1_name_updated");
+        task1Updated.setDescription("task1_description_updated");
+        task1Updated.setStatus(TaskStatus.IN_PROGRESS);
+        task1Updated.setId(task1.getId());
+        taskManager.updateTask(task1Updated);
         taskManager.getTaskById(1);
+        List<Task> history = historyManager.getHistory();
 
         assertEquals("[Task{id='1 , taskName= task1_name , description.length=17, status=NEW }, " +
                 "Task{id='1 , taskName= task1_name_updated , description.length=25, status=IN_PROGRESS }]",
@@ -346,17 +348,25 @@ public class TaskManagerTest {
                 "status=DONE subtasksIds= [8]}, Epic{id='7 , taskName= epic2_updated_name , description.length=25, " +
                 "status=DONE subtasksIds= [8]}]";
         taskManager.getEpicById(7);
-        epic2.setTaskName("epic2_updated_name");
-        epic2.setDescription("epic2_updated_description");
-        taskManager.updateEpic(7);
+        Epic epic2Updated = new Epic();
+        epic2Updated.setTaskName("epic2_updated_name");
+        epic2Updated.setDescription("epic2_updated_description");
+        epic2Updated.setId(epic2.getId());
+        epic2Updated.setStatus(epic2.getStatus());
+
+        taskManager.updateEpic(epic2Updated);
         taskManager.getEpicById(7);
         assertEquals(epic2String, historyManager.getHistory().toString());
 
         taskManager.getSubtaskById(12);
-        subtask5.setTaskName("subtask5_updated_name");
-        subtask5.setDescription("subtask5_updated_description");
-        subtask5.setStatus(TaskStatus.IN_PROGRESS);
-        taskManager.updateSubTask(12);
+        Subtask subtask5Updated = new Subtask();
+        subtask5Updated.setTaskName("subtask5_updated_name");
+        subtask5Updated.setDescription("subtask5_updated_description");
+        subtask5Updated.setStatus(TaskStatus.IN_PROGRESS);
+        subtask5Updated.setId(subtask5.getId());
+        subtask5Updated.setEpicId(epic4.getId());
+
+        taskManager.updateSubTask(subtask5Updated);
         String subtask5String = "[Epic{id='7 , taskName= epic2_name , description.length=17, status=DONE " +
                 "subtasksIds= [8]}, Epic{id='7 , taskName= epic2_updated_name , description.length=25, status=DONE " +
                 "subtasksIds= [8]}, Subtask{id='12 , taskName= subtask5_name , description.length=20, status=NEW " +

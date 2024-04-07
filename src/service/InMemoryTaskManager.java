@@ -16,7 +16,7 @@ public class InMemoryTaskManager implements TaskManager {
     private Map<Integer, Subtask> subtasks;
     private Map<Integer, Epic> epics;
     private List<Integer> subtasksIds = new ArrayList<>();
-    private HistoryManager historyManager;
+    private HistoryManager historyManager = Managers.getDefaultHistory();
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
@@ -121,7 +121,7 @@ public class InMemoryTaskManager implements TaskManager {
     //остальные методы
     @Override
     public Task getTaskById(int id) {
-        historyManager = Managers.getDefaultHistory();
+        // historyManager = Managers.getDefaultHistory();
         historyManager.add(tasks.get(id));
         return tasks.get(id);
     }
@@ -149,17 +149,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(int id) {
+    public void updateTask(Task task) {
+        int id = task.getId();
         if (tasks.containsKey(id)) {
-            Task task = tasks.get(id);
             tasks.put(id, task);
         }
     }
 
     @Override
-    public void updateSubTask(int id) {
+    public void updateSubTask(Subtask subtask) {
+        int id = subtask.getId();
         if (subtasks.containsKey(id)) {
-            Subtask subtask = subtasks.get(id);
             subtasks.put(id, subtask);
             int epicId = subtask.getEpicId();
             setEpicStatus(epicId);
@@ -167,10 +167,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateEpic(int id) {
+    public void updateEpic(Epic epic) {
+        int id = epic.getId();
         if (epics.containsKey(id)) {
-            Epic epic = epics.get(id);
-            List<Integer> subtasksIds = epic.getSubtasksIds();
+            Epic middleEpic = epics.get(id);
+            List<Integer> subtasksIds = middleEpic.getSubtasksIds();
+            for (int subtaskId : subtasksIds) {
+                epic.addSubtasksIds(subtaskId);
+            }
             setEpicStatus(id);
             epics.put(id, epic);
         }
