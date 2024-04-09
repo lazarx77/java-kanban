@@ -53,9 +53,8 @@ public class Task {
         this.description = description;
     }
 
-    public TaskStatus setStatus(TaskStatus status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
-        return status;
     }
 
         @Override

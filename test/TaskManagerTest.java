@@ -352,7 +352,7 @@ public class TaskManagerTest {
         epic2Updated.setTaskName("epic2_updated_name");
         epic2Updated.setDescription("epic2_updated_description");
         epic2Updated.setId(epic2.getId());
-        epic2Updated.setStatus(epic2.getStatus());
+//        epic2Updated.setStatus(TaskStatus.NEW);
 
         taskManager.updateEpic(epic2Updated);
         taskManager.getEpicById(7);

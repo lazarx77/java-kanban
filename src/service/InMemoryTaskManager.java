@@ -1,9 +1,6 @@
 package service;
 
-import model.Epic;
-import model.Subtask;
-import model.Task;
-import model.TaskStatus;
+import model.*;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -174,6 +171,7 @@ public class InMemoryTaskManager implements TaskManager {
             List<Integer> subtasksIds = middleEpic.getSubtasksIds();
             for (int subtaskId : subtasksIds) {
                 epic.addSubtasksIds(subtaskId);
+                epic.setStatus(middleEpic.getStatus());
             }
             setEpicStatus(id);
             epics.put(id, epic);
