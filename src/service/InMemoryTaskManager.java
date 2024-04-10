@@ -126,6 +126,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Epic getEpicById(int id) {
+        setEpicStatus(id); // защита от внешнего setStatus для epic - пересчет статуса перед записью в историю
         historyManager = Managers.getDefaultHistory();
         historyManager.add(epics.get(id));
         return epics.get(id);
@@ -171,7 +172,6 @@ public class InMemoryTaskManager implements TaskManager {
             List<Integer> subtasksIds = middleEpic.getSubtasksIds();
             for (int subtaskId : subtasksIds) {
                 epic.addSubtasksIds(subtaskId);
-                epic.setStatus(middleEpic.getStatus());
             }
             setEpicStatus(id);
             epics.put(id, epic);

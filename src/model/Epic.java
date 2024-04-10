@@ -1,13 +1,15 @@
 package model;
 
+import service.InMemoryTaskManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
+    private Integer id;
 
-    private TaskStatus status = TaskStatus.NEW;
+    //private TaskStatus status = TaskStatus.NEW;
     private final List<Integer> subtasksIds = new ArrayList<>();
-
 
     public List<Integer> addSubtasksIds(int id) {
         subtasksIds.add(id);
