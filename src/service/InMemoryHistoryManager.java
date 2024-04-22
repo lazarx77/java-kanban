@@ -2,20 +2,27 @@ package service;
 
 import model.Task;
 
-import java.util.*;
-//import ;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
     private CustomLinkedList<Task> historyList = new CustomLinkedList<>();
     //static final int HISTORY_LIST_LIMIT = 10;
-    private Map<Integer, Node> history = new HashMap<>();
+    private Map<Integer, Node<Task>> history = new HashMap<>();
 
     @Override
     public void add(Task task) {
-        historyList.linkLast(task);
-        history.put(task.getId(), historyList.tail);
-
+        int id = task.getId();
+        if (history.containsKey(id)) {
+            //Node node = history.get(id);
+            historyList.removeNode(history.get(id));
+            historyList.linkLast(task);
+            history.put(task.getId(), historyList.tail);
+        }
+        history.put(id, historyList.tail);
 
 //
 //        if (history.size() >= HISTORY_LIST_LIMIT) {
@@ -44,10 +51,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         public ArrayList<T> getTasks() {
             ArrayList<T> list = new ArrayList<>();
-            final Node<T> curHead = head;
-            final Node<T> curTail = tail;
+            Node<T> curHead = head;
+            Node<T> curTail = tail;
             list.add(curHead.data);
-            for (int i = 1; i < history.size(); i++) {
+            for (int i = 1; i <= historyList.size(); i++) {
                 list.add(head.next.data);
             }
             list.add(curTail.data);
@@ -55,81 +62,54 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
 
         public void linkLast(T element) {
-            final Node<T> oldTail = tail;
-            final Node<T> newNode = new Node<>(oldTail, element, null);
+            Node<T> oldTail = tail;
+            Node<T> newNode = new Node<>(oldTail, element, null);
             tail = newNode;
-            if (oldTail != null)
-                oldTail.next = newNode;
-            else
+            if (oldTail == null) {
                 head = newNode;
+            } else {
+                oldTail.next = newNode;
+            }
             size++;
         }
 
-        public void removeNode(Node x) {
-            //final T element = x.data;
-            final Node<T> next = x.next;
-            final Node<T> prev = x.prev;
+        public void removeNode(Node<T> node) {
+            //final Node<T> element = node.data;
+            final Node<T> next = node.next;
+            final Node<T> prev = node.prev;
 
             if (prev == null) {
                 head = next;
             } else {
                 prev.next = next;
-                x.prev = null;
+                node.prev = null;
             }
 
             if (next == null) {
                 tail = prev;
             } else {
                 next.prev = prev;
-                x.next = null;
+                node.next = null;
             }
 
-            x.data = null;
+            node.data = null;
             size--;
-            //modCount++;
         }
-
-
-
-//        public T getLast() {
-//            // Реализуйте метод
-//            final Node<T> curTail = tail;
-//            if (curTail == null)
-//                throw new NoSuchElementException();
-//            return tail.data;
-//        }
 
         public int size() {
             return this.size;
         }
-
-//        public static void main(String[] args) {
-//            HandMadeLinkedList<Integer> integers = new HandMadeLinkedList<>();
-//
-//            integers.addFirst(1);
-//            integers.addFirst(2);
-//            integers.addFirst(3);
-//            integers.addLast(4);
-//            integers.addLast(5);
-//            integers.addFirst(1);
-//
-//            System.out.println(integers.getFirst());
-//            System.out.println(integers.size());
-//            System.out.println(integers.getLast());
-//            System.out.println(integers.size());
-//        }
     }
-
 
     @Override
     public void remove(int id) {
         history.remove(id);
     }
 
-//    @Override
-//    public void clearHistory() {
-//        history.clear();
-//    }
+    @Override
+    public void clearHistory() {
+        history.clear();
+    }
 
     @Override
     public List<Task> getHistory() {
