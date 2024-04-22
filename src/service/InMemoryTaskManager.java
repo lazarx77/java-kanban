@@ -118,7 +118,7 @@ public class InMemoryTaskManager implements TaskManager {
     //остальные методы
     @Override
     public Task getTaskById(int id) {
-        // historyManager = Managers.getDefaultHistory();
+        historyManager = Managers.getDefaultHistory();
         historyManager.add(tasks.get(id));
         return tasks.get(id);
     }
