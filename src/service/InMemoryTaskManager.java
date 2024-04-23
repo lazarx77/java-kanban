@@ -87,7 +87,9 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.remove(id);
         setEpicStatus(epicId);
     }
+
     // методы для очистки задач
+
     @Override
     public void clearAllSubtasks() {
         for (int id : subtasks.keySet()) {
