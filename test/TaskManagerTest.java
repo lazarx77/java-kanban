@@ -240,7 +240,7 @@ public class TaskManagerTest {
         task1.setDescription("task1_description");
         task1.setStatus(TaskStatus.NEW);
         task1 = taskManager.createNewTask(task1);
-        historyManager.add(task1);
+        taskManager.getTaskById(1);
         final List<Task> history = historyManager.getHistory();
         assertNotNull(history, "История не пустая.");
         assertEquals(1, history.size(), "История не пустая.");
@@ -248,7 +248,7 @@ public class TaskManagerTest {
 
     // убедитесь, что задачи, добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных
     @Test
-    public void historyShouldSavePreviousTaskFormAfterUpdate() {
+    public void historyShouldSaveSaveTaskAfterUpdate() {
         Task task1 = new Task(); // id 1
         task1.setTaskName("task1_name");
         task1.setDescription("task1_description");
@@ -264,13 +264,13 @@ public class TaskManagerTest {
         taskManager.getTaskById(1);
         List<Task> history = historyManager.getHistory();
 
-        assertEquals("[Task{id='1 , taskName= task1_name , description.length=17, status=NEW }, " +
-                "Task{id='1 , taskName= task1_name_updated , description.length=25, status=IN_PROGRESS }]",
+        assertEquals("[Task{id='1 , taskName= task1_name_updated , description.length=25, " +
+                        "status=IN_PROGRESS }]",
                 history.toString());
     }
 
     @Test
-    public void historyShouldSavePreviousEpicsAndSubtasksFormAfterUpdate() {
+    public void historyShouldSaveUpdatedEpicsAndSubtasksFormAfterUpdate() {
         Task task1 = new Task(); // id 1
         task1.setTaskName("task1_name");
         task1.setDescription("task1_description");
@@ -344,9 +344,8 @@ public class TaskManagerTest {
         subtask5.setEpicId(epic4.getId());
         subtask5 = taskManager.createNewSubtask(subtask5);
 
-        String epic2String = "[Epic{id='7 , taskName= epic2_name , description.length=17, " +
-                "status=DONE subtasksIds= [8]}, Epic{id='7 , taskName= epic2_updated_name , description.length=25, " +
-                "status=DONE subtasksIds= [8]}]";
+        String epic2String = "[Epic{id='7 , taskName= epic2_updated_name , description.length=25, status=DONE " +
+                "subtasksIds= [8]}]";
         taskManager.getEpicById(7);
         Epic epic2Updated = new Epic();
         epic2Updated.setTaskName("epic2_updated_name");
@@ -367,10 +366,9 @@ public class TaskManagerTest {
         subtask5Updated.setEpicId(epic4.getId());
 
         taskManager.updateSubTask(subtask5Updated);
-        String subtask5String = "[Epic{id='7 , taskName= epic2_name , description.length=17, status=DONE " +
-                "subtasksIds= [8]}, Epic{id='7 , taskName= epic2_updated_name , description.length=25, status=DONE " +
-                "subtasksIds= [8]}, Subtask{id='12 , taskName= subtask5_name , description.length=20, status=NEW " +
-                "epicId = 10}]";
+        String subtask5String = "[Epic{id='7 , taskName= epic2_updated_name , description.length=25, status=DONE" +
+                " subtasksIds= [8]}, Subtask{id='12 , taskName= subtask5_name , description.length=20, " +
+                "status=NEW epicId = 10}]";
         assertEquals(subtask5String, historyManager.getHistory().toString());
     }
 }
