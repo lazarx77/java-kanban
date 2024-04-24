@@ -27,13 +27,11 @@ public class InMemoryHistoryManager implements HistoryManager {
         private int size;
 
         public CustomLinkedList() {
-            this.head = null;
-            this.tail = null;
             this.size = 0;
         }
 
-        public ArrayList<T> getTasks() {
-            ArrayList<T> list = new ArrayList<>();
+        public List<T> getTasks() {
+            List<T> list = new ArrayList<>();
             if (head != null) {
                 Node<T> tempNode = head;
                 while (tempNode != null) {

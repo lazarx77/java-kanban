@@ -132,7 +132,6 @@ public class InMemoryTaskManager implements TaskManager {
     //остальные методы
     @Override
     public Task getTaskById(int id) {
-        historyManager = Managers.getDefaultHistory();
         historyManager.add(tasks.get(id));
         return tasks.get(id);
     }
@@ -141,14 +140,12 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(int id) {
         setEpicStatus(id); // защита от внешнего setStatus для epic - пересчет статуса перед записью в историю
-        historyManager = Managers.getDefaultHistory();
         historyManager.add(epics.get(id));
         return epics.get(id);
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
-        historyManager = Managers.getDefaultHistory();
         historyManager.add(subtasks.get(id));
         return subtasks.get(id);
     }
@@ -224,7 +221,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(id);
         List<Subtask> epicSubtasks = new ArrayList<>();
         subtasksIds = epic.getSubtasksIds();
-            for (int subtasksIds : subtasksIds) {
+        for (int subtasksIds : subtasksIds) {
             epicSubtasks.add(subtasks.get(subtasksIds));
         }
         return epicSubtasks;

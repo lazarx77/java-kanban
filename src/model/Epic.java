@@ -6,7 +6,7 @@ import java.util.List;
 public class Epic extends Task {
     private Integer id;
 
-     private final List<Integer> subtasksIds = new ArrayList<>();
+    private final List<Integer> subtasksIds = new ArrayList<>();
 
     public List<Integer> addSubtasksIds(int id) {
         subtasksIds.add(id);

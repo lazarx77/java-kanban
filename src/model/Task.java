@@ -1,4 +1,5 @@
 package model;
+
 import java.util.Objects;
 
 public class Task {
@@ -21,7 +22,7 @@ public class Task {
             result = result + ", extraInfo=null";
         }
 
-            result = result + ", status=" + status + " ";
+        result = result + ", status=" + status + " ";
         return result + '}';
     }
 
@@ -58,7 +59,7 @@ public class Task {
         this.status = status;
     }
 
-        @Override
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
