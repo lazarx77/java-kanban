@@ -8,6 +8,8 @@ import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import model.Epic;
 import model.Subtask;
@@ -18,7 +20,7 @@ import model.TaskStatus;
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     //private TaskType type;
-    File file = new File("C:\\Users\\Administrator\\dev\\java-kanban", "savedTasks.txt");
+    File file = new File("C:\\Users\\Port\\dev\\java-kanban", "savedTasks.txt");
     String CSV_HEADER = "id,type,name,status,description,epic";
 
     @Override
@@ -78,8 +80,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return result;
     }
 
-    private Task fromString(String value) {
-        String[] split = value.split(",");
+    private Task fromString(String string) {
+        String[] split = string.split(",");
 
         switch (TaskType.valueOf(split[1])) {
             case EPIC:
@@ -107,7 +109,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     static void loadFromFile(File file) {
         try (BufferedReader fileReader = new BufferedReader(new FileReader(file))) {
-            fileReader.readLine();
+//            String taskStringFromFile = fileReader.readLine();
+            BufferedReader br = new BufferedReader(fileReader);
+
+            while (br.ready()) {
+                String line = br.readLine();
+                //fromString
+                System.out.println(line);
+            }
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
