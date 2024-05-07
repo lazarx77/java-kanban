@@ -1,5 +1,7 @@
 package model;
 
+import service.TaskType;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,11 @@ public class Epic extends Task {
 
     public void clearSubtaskIds() {
         subtasksIds.clear();
+    }
+
+    @Override
+    public TaskType getType() {
+        return TaskType.EPIC;
     }
 
     @Override
