@@ -13,9 +13,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     static File testFile;
     static File file;
-    ;
     private static final String CSV_HEADER = "id,type,name,status,description,epic";
-
 
     public static void main(String[] args) {
 
