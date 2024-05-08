@@ -11,19 +11,18 @@ import java.nio.charset.StandardCharsets;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    static File testFile;
-    static File file;
+    private static File loadFile;
+    private static final File saveFile = new File("savedTasks.csv");
     private static final String CSV_HEADER = "id,type,name,status,description,epic";
 
     public static void main(String[] args) {
 
         //тестируем пользовательский сценарий
 
-        setTestFile("testFile.csv");
-        setFile("savedTasks.csv");
+        setLoadFile("testFile.csv");
 
         FileBackedTaskManager fm = new FileBackedTaskManager();
-        fm = fm.loadFromFile(testFile);
+        fm = loadFromFile(loadFile);
 
 
         Task task8 = new Task(); // id 8
@@ -73,14 +72,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     }
 
-    public static File setTestFile(String fileName) {
-        FileBackedTaskManager.testFile = new File(fileName);
-        return testFile;
+    // метод для создания файла, из которого нужно загружать ранее сохраненные задачи
+    public static File setLoadFile(String fileName) {
+        FileBackedTaskManager.loadFile = new File(fileName);
+        return loadFile;
     }
 
-    public static File setFile(String fileName) {
-        FileBackedTaskManager.file = new File(fileName);
-        return file;
+    //метод для получения файла с сохраненными в процессе работы менеджера задачами
+    public static File getSaveFile() {
+        return saveFile;
     }
 
     //переопределение всех методов, в которых есть необходимость сохранения данных в файл - после лююбого мнесения
@@ -170,7 +170,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     //метод для сохранения задач в файл
 
     public void save() {
-        try (Writer fileWriter = new FileWriter(file, StandardCharsets.UTF_8)) {
+        try (Writer fileWriter = new FileWriter(saveFile, StandardCharsets.UTF_8)) {
             fileWriter.write(CSV_HEADER + "\n");
 
             if (!super.getAllTasks().isEmpty()) {
