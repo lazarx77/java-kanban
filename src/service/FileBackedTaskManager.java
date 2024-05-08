@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private static File loadFile;
-    private static final File saveFile = new File("savedTasks.csv");
+    private static final File SAVE_FILE = new File("savedTasks.csv");
     private static final String CSV_HEADER = "id,type,name,status,description,epic";
 
     public static void main(String[] args) {
@@ -80,7 +80,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     //метод для получения файла с сохраненными в процессе работы менеджера задачами
     public static File getSaveFile() {
-        return saveFile;
+        return SAVE_FILE;
     }
 
     //переопределение всех методов, в которых есть необходимость сохранения данных в файл - после лююбого мнесения
@@ -170,7 +170,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     //метод для сохранения задач в файл
 
     public void save() {
-        try (Writer fileWriter = new FileWriter(saveFile, StandardCharsets.UTF_8)) {
+        try (Writer fileWriter = new FileWriter(SAVE_FILE, StandardCharsets.UTF_8)) {
             fileWriter.write(CSV_HEADER + "\n");
 
             if (!super.getAllTasks().isEmpty()) {
