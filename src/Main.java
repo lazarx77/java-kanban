@@ -1,19 +1,16 @@
-import model.Task;
-import model.TaskStatus;
-import service.FileBackedTaskManager;
-import service.HistoryManager;
-
-import service.TaskManager;
 import model.Epic;
 import model.Subtask;
+import model.Task;
+import model.TaskStatus;
+import service.HistoryManager;
 import service.Managers;
+import service.TaskManager;
 
 
 public class Main {
     public static TaskManager taskManager = Managers.getDefault();
     public static HistoryManager historyManager = Managers.getDefaultHistory();
 
-    public static FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager();
 
     public static void main(String[] args) {
         System.out.println("Поехали!");
@@ -22,7 +19,6 @@ public class Main {
         task1.setTaskName("task1_name");
         task1.setDescription("task1_description");
         task1.setStatus(TaskStatus.NEW);
-        Task fileTask1 = fileBackedTaskManager.createNewTask(task1);
         task1 = taskManager.createNewTask(task1);
 
 
@@ -30,13 +26,11 @@ public class Main {
         task2.setTaskName("task2_name");
         task2.setDescription("task2_description");
         task2.setStatus(TaskStatus.IN_PROGRESS);
-        Task fileTask2 = fileBackedTaskManager.createNewTask(task2);
         task2 = taskManager.createNewTask(task2);
 
         Epic epic1 = new Epic(); // id 3
         epic1.setTaskName("epic1_name");
         epic1.setDescription("epic1_description");
-        Epic fileEpic1 = fileBackedTaskManager.createNewEpic(epic1);
         epic1 = taskManager.createNewEpic(epic1);
 
         Subtask subtask1 = new Subtask(); // id 4
@@ -44,7 +38,6 @@ public class Main {
         subtask1.setDescription("subtask1_description");
         subtask1.setStatus(TaskStatus.NEW);
         subtask1.setEpicId(epic1.getId());
-        Subtask fileSubtask1 = fileBackedTaskManager.createNewSubtask(subtask1);
         subtask1 = taskManager.createNewSubtask(subtask1);
 
         Subtask subtask2 = new Subtask(); // id 5
@@ -52,7 +45,6 @@ public class Main {
         subtask2.setDescription("subtask2_description");
         subtask2.setStatus(TaskStatus.DONE);
         subtask2.setEpicId(epic1.getId());
-        Subtask fileSubtask2 = fileBackedTaskManager.createNewSubtask(subtask2);
         subtask2 = taskManager.createNewSubtask(subtask2);
 
         Subtask subtask3 = new Subtask(); // id 6
@@ -60,13 +52,11 @@ public class Main {
         subtask3.setDescription("subtask3_description");
         subtask3.setStatus(TaskStatus.DONE);
         subtask3.setEpicId(epic1.getId());
-        Subtask fileSubtask3 = fileBackedTaskManager.createNewSubtask(subtask3);
         subtask3 = taskManager.createNewSubtask(subtask3);
 
         Epic epic2 = new Epic(); // id 7
         epic2.setTaskName("epic2_name");
         epic2.setDescription("epic2_description");
-        Epic fileEpic2 = fileBackedTaskManager.createNewEpic(epic2);
         epic2 = taskManager.createNewEpic(epic2);
 
         taskManager.getTaskById(2);
