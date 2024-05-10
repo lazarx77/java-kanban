@@ -1,19 +1,18 @@
-import model.Task;
-import model.TaskStatus;
-
-import org.junit.jupiter.api.BeforeEach;
-import service.HistoryManager;
-
-import service.TaskManager;
 import model.Epic;
 import model.Subtask;
-import service.Managers;
+import model.Task;
+import model.TaskStatus;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.*;
 
-
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class TaskManagerTest {
 
@@ -26,6 +25,129 @@ public class TaskManagerTest {
         taskManager = Managers.getDefault();
         historyManager = Managers.getDefaultHistory();
 
+    }
+
+    // проверяем сохранение задач в отсутствующий/пустой файл
+    @Test
+    public void fileBackedTaskManagerShouldSaveTasksToNewFile() {
+        FileBackedTaskManager fm = new FileBackedTaskManager();
+        Task task1 = new Task();
+        task1.setTaskName("task1_name");
+        task1.setDescription("task1_description");
+        task1.setStatus(TaskStatus.NEW);
+        task1 = fm.createNewTask(task1);
+        File saveFile = FileBackedTaskManager.getSaveFile();
+        Task middleTask = null;
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(saveFile, StandardCharsets.UTF_8))) {
+            BufferedReader br = new BufferedReader(fileReader);
+
+            while (br.ready()) {
+                String line = br.readLine();
+                if (line.isEmpty()) {
+                    break;
+                }
+                if (!line.startsWith("id")) {
+                    middleTask = fm.fromString(line);
+                }
+            }
+        } catch (IOException e) {
+            throw new ManagerSaveException("Ошибка чтения файла");
+        }
+        assertEquals(fm.toString(task1), fm.toString(middleTask));
+        saveFile.delete();
+    }
+
+    // проверяем сохранение задач в отсутствующий/пустой файл
+    @Test
+    public void fileBackedTaskManagerShouldSaveMultipleTasks() {
+        FileBackedTaskManager fm = new FileBackedTaskManager();
+        Task task1 = new Task();
+        task1.setTaskName("task1_name");
+        task1.setDescription("task1_description");
+        task1.setStatus(TaskStatus.NEW);
+        task1 = fm.createNewTask(task1);
+
+        Epic epic1 = new Epic();
+        epic1.setTaskName("epic1");
+        epic1.setDescription("epic1_description");
+        epic1 = fm.createNewEpic(epic1);
+
+        Subtask subtask1 = new Subtask();
+        subtask1.setTaskName("subtask1");
+        subtask1.setDescription("subtask1_description");
+        subtask1.setStatus(TaskStatus.NEW);
+        subtask1.setEpicId(epic1.getId());
+        subtask1 = fm.createNewSubtask(subtask1);
+
+        Subtask subtask2 = new Subtask();
+        subtask2.setTaskName("subtask2");
+        subtask2.setDescription("subtask2_description");
+        subtask2.setStatus(TaskStatus.DONE);
+        subtask2.setEpicId(epic1.getId());
+        subtask2 = fm.createNewSubtask(subtask2);
+        File saveFile = FileBackedTaskManager.getSaveFile();
+
+        List<String> taskStings = new ArrayList<>();
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(saveFile, StandardCharsets.UTF_8))) {
+            BufferedReader br = new BufferedReader(fileReader);
+
+            while (br.ready()) {
+                String line = br.readLine();
+                if (line.isEmpty()) {
+                    break;
+                }
+                if (!line.startsWith("id")) {
+                    taskStings.add(line);
+                }
+            }
+        } catch (IOException e) {
+            throw new ManagerSaveException("Ошибка чтения файла");
+        }
+        assertEquals(taskStings.toString(), "[1,TASK,task1_name,NEW,task1_description, 2," +
+                "EPIC,epic1,IN_PROGRESS,epic1_description, 3,SUBTASK,subtask1,NEW,subtask1_description,2, 4," +
+                "SUBTASK,subtask2,DONE,subtask2_description,2]");
+    }
+
+    @Test
+    public void fileBackedTaskManagerShouldLoadMultipleTasks() {
+        FileBackedTaskManager fm = new FileBackedTaskManager();
+        File testFile = FileBackedTaskManager.setLoadFile("tempTestFile.csv");
+
+        try (Writer fw = new FileWriter(testFile)) {
+            fw.write("id,type,name,status,description,epic\n" +
+                    "2,TASK,task9_name,IN_PROGRESS,task9_description\n" +
+                    "3,EPIC,epic1_name,IN_PROGRESS,epic1_description\n" +
+                    "4,SUBTASK,subtask11_name,NEW,subtask11_description,3\n" +
+                    "5,SUBTASK,subtask2_name,DONE,subtask2_description,3\n" +
+                    "6,SUBTASK,subtask3_name,DONE,subtask3_description,3");
+        } catch (IOException e) {
+            System.out.println("Ошибка записи в файл");
+        }
+        fm = FileBackedTaskManager.loadFromFile(testFile);
+        fm.save();
+        File saveFile = FileBackedTaskManager.getSaveFile();
+
+        List<String> taskStings = new ArrayList<>();
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(saveFile, StandardCharsets.UTF_8))) {
+            BufferedReader br = new BufferedReader(fileReader);
+
+            while (br.ready()) {
+                String line = br.readLine();
+                if (line.isEmpty()) {
+                    break;
+                }
+                if (!line.startsWith("id")) {
+                    taskStings.add(line);
+                }
+            }
+        } catch (IOException e) {
+            throw new ManagerSaveException("Ошибка чтения файла");
+        }
+        assertEquals(taskStings.toString(), "[2,TASK,task9_name,IN_PROGRESS,task9_description, 3," +
+                "EPIC,epic1_name,IN_PROGRESS,epic1_description, 4,SUBTASK,subtask11_name,NEW,subtask11_description,3," +
+                " 5,SUBTASK,subtask2_name,DONE,subtask2_description,3, 6,SUBTASK,subtask3_name,DONE," +
+                "subtask3_description,3]");
+        testFile.delete();
     }
 
     // проверьте, что экземпляры класса Task равны друг другу, если равен их id
@@ -41,7 +163,7 @@ public class TaskManagerTest {
 
     // проверьте, что наследники класса Task равны друг другу, если равен их id
     @Test
-    public void epic1ShouldBeEqualToEpic1InTaskManager(){
+    public void epic1ShouldBeEqualToEpic1InTaskManager() {
         Epic epic1 = new Epic();
         epic1.setTaskName("epic1");
         epic1.setDescription("epic1_description");
@@ -64,7 +186,7 @@ public class TaskManagerTest {
     }
 
     @Test
-    public void subtask1ShouldBeEqualToSubtask1InTaskManager(){
+    public void subtask1ShouldBeEqualToSubtask1InTaskManager() {
         Epic epic1 = new Epic();
         epic1.setTaskName("epic1");
         epic1.setDescription("epic1_description");

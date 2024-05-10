@@ -1,16 +1,16 @@
+import model.Epic;
+import model.Subtask;
 import model.Task;
 import model.TaskStatus;
 import service.HistoryManager;
-
-import service.TaskManager;
-import model.Epic;
-import model.Subtask;
 import service.Managers;
+import service.TaskManager;
 
 
 public class Main {
     public static TaskManager taskManager = Managers.getDefault();
     public static HistoryManager historyManager = Managers.getDefaultHistory();
+
 
     public static void main(String[] args) {
         System.out.println("Поехали!");
@@ -20,6 +20,7 @@ public class Main {
         task1.setDescription("task1_description");
         task1.setStatus(TaskStatus.NEW);
         task1 = taskManager.createNewTask(task1);
+
 
         Task task2 = new Task(); // id 2
         task2.setTaskName("task2_name");

@@ -1,19 +1,22 @@
 package service;
 
-import model.*;
+import model.Epic;
+import model.Subtask;
+import model.Task;
+import model.TaskStatus;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int id = 0;
-    private Map<Integer, Task> tasks;
-    private Map<Integer, Subtask> subtasks;
-    private Map<Integer, Epic> epics;
-    private List<Integer> subtasksIds = new ArrayList<>();
-    private HistoryManager historyManager = Managers.getDefaultHistory();
+    protected int id = 0;
+    protected Map<Integer, Task> tasks;
+    protected Map<Integer, Subtask> subtasks;
+    protected Map<Integer, Epic> epics;
+    protected List<Integer> subtasksIds = new ArrayList<>();
+    protected HistoryManager historyManager = Managers.getDefaultHistory();
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
