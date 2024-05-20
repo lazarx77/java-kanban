@@ -2,6 +2,9 @@ package model;
 
 import service.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -10,7 +13,9 @@ public class Task {
     private String taskName;
     private String description;
     private TaskStatus status;
-
+    long duration;
+    LocalDateTime startTime;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
 
     @Override
     public String toString() {
@@ -19,15 +24,44 @@ public class Task {
                 "id='" + id + " " +
                 ", taskName= " + taskName + " ";
         if (description != null) {
-            result = result + ", description.length=" + description.length();
+            result = result + ", description.length= " + description.length();
         } else {
             result = result + ", extraInfo=null";
+        }
+        if (startTime != null) {
+            result = result + ", startTime= " + startTime.format(formatter);
+        } else {
+            result = result + ", startTime= 00:00";
+        }
+        if (duration != 0) {
+            result = result + ", duration= " + duration;
+        } else {
+            result = result + ", duration= 0";
         }
 
         result = result + ", status=" + status + " ";
         return result + '}';
     }
 
+    public LocalDateTime getEndTime() {
+        return startTime.plus(Duration.ofMinutes(duration));
+    }
+
+        public void setDuration(Duration duration) {
+        this.duration = duration.toMinutes();
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public Duration getDuration() {
+        return Duration.ofMinutes(duration);
+    }
 
     public int getId() {
         return id;

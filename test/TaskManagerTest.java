@@ -8,6 +8,7 @@ import service.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class TaskManagerTest {
         task1.setTaskName("task1_name");
         task1.setDescription("task1_description");
         task1.setStatus(TaskStatus.NEW);
+        task1.setDuration(30);
+        task1.setStartTime(LocalDateTime.of(2022,12,1,10,10,0));
         task1 = fm.createNewTask(task1);
         File saveFile = FileBackedTaskManager.getSaveFile();
         Task middleTask = null;
@@ -65,6 +68,8 @@ public class TaskManagerTest {
         task1.setTaskName("task1_name");
         task1.setDescription("task1_description");
         task1.setStatus(TaskStatus.NEW);
+        task1.setDuration(30);
+        task1.setStartTime(LocalDateTime.of(2022,12,1,10,10,0));
         task1 = fm.createNewTask(task1);
 
         Epic epic1 = new Epic();
@@ -76,6 +81,8 @@ public class TaskManagerTest {
         subtask1.setTaskName("subtask1");
         subtask1.setDescription("subtask1_description");
         subtask1.setStatus(TaskStatus.NEW);
+        subtask1.setDuration(15);
+        subtask1.setStartTime(LocalDateTime.of(2022,12,1,10,10,0));
         subtask1.setEpicId(epic1.getId());
         subtask1 = fm.createNewSubtask(subtask1);
 
@@ -83,6 +90,8 @@ public class TaskManagerTest {
         subtask2.setTaskName("subtask2");
         subtask2.setDescription("subtask2_description");
         subtask2.setStatus(TaskStatus.DONE);
+        subtask2.setDuration(20);
+        subtask2.setStartTime(LocalDateTime.of(2022,12,1,10,25,0));
         subtask2.setEpicId(epic1.getId());
         subtask2 = fm.createNewSubtask(subtask2);
         File saveFile = FileBackedTaskManager.getSaveFile();
@@ -114,8 +123,8 @@ public class TaskManagerTest {
         File testFile = FileBackedTaskManager.setLoadFile("tempTestFile.csv");
 
         try (Writer fw = new FileWriter(testFile)) {
-            fw.write("id,type,name,status,description,epic\n" +
-                    "2,TASK,task9_name,IN_PROGRESS,task9_description\n" +
+            fw.write("id,type,name,status,description,epic,date-time,duration\n" +
+                    "2,TASK,task9_name,IN_PROGRESS,task9_description,\n" +
                     "3,EPIC,epic1_name,IN_PROGRESS,epic1_description\n" +
                     "4,SUBTASK,subtask11_name,NEW,subtask11_description,3\n" +
                     "5,SUBTASK,subtask2_name,DONE,subtask2_description,3\n" +

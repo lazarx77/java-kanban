@@ -1,0 +1,6 @@
+id,type,name,status,description,epic,date-time,duration
+2,TASK,task9_name,IN_PROGRESS,task9_description,null,0
+3,EPIC,epic1_name,IN_PROGRESS,epic1_description,2024-05-20T15:09:03.602267100,0
+4,SUBTASK,subtask11_name,NEW,subtask11_description,3,null,0
+5,SUBTASK,subtask2_name,DONE,subtask2_description,3,null,0
+6,SUBTASK,subtask3_name,DONE,subtask3_description,3,null,0

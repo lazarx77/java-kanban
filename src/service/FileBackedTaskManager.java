@@ -7,13 +7,15 @@ import model.TaskStatus;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private static File loadFile;
     private static final File SAVE_FILE = new File("savedTasks.csv");
-    private static final String CSV_HEADER = "id,type,name,status,description,epic";
+    private static final String CSV_HEADER = "id,type,name,status,description,epic,date-time,duration";
 
     public static void main(String[] args) {
 
@@ -22,7 +24,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         setLoadFile("testFile.csv");
 
         FileBackedTaskManager fm = new FileBackedTaskManager();
-        fm = loadFromFile(loadFile);
+        //fm = loadFromFile(loadFile);
 
 
         Task task8 = new Task(); // id 8
@@ -204,14 +206,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String result;
         if (task.toString().startsWith("Task")) {
             result = id + "," + TaskType.TASK + "," + task.getTaskName(id) + "," + task.getStatus() + "," +
-                    task.getDescription();
+                    task.getDescription() + "," + task.getStartTime() + "," + task.getDuration();
         } else if (task.toString().startsWith("Epic")) {
             result = id + "," + TaskType.EPIC + "," + task.getTaskName(id) + "," + task.getStatus() + "," +
-                    task.getDescription();
+                    task.getDescription() + "," + task.getStartTime() + "," + task.getDuration();
         } else {
             Subtask middleSubtask = (Subtask) task;
             result = id + "," + TaskType.SUBTASK + "," + task.getTaskName(id) + "," + task.getStatus() + "," +
-                    task.getDescription() + "," + middleSubtask.getEpicId();
+                    task.getDescription() + "," + middleSubtask.getEpicId() + "," + task.getStartTime() +
+                    "," + task.getDuration();
         }
         return result;
     }
@@ -228,6 +231,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 epic.setTaskName(split[2]);
                 epic.setStatus(TaskStatus.valueOf(split[3]));
                 epic.setDescription(split[4]);
+                epic.setStartTime(LocalDateTime.parse(split[5]));
+                epic.setDuration(Duration.ofMinutes(Integer.parseInt(split[6])));
                 return epic;
             case SUBTASK:
                 Subtask subtask = new Subtask();
@@ -236,6 +241,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 subtask.setStatus(TaskStatus.valueOf(split[3]));
                 subtask.setDescription(split[4]);
                 subtask.setEpicId(Integer.parseInt(split[5]));
+                subtask.setStartTime(LocalDateTime.parse(split[6]));
+                subtask.setDuration(Duration.ofMinutes(Integer.parseInt(split[7])));
                 return subtask;
             case TASK:
                 Task task = new Task();
@@ -243,6 +250,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task.setTaskName(split[2]);
                 task.setStatus(TaskStatus.valueOf(split[3]));
                 task.setDescription(split[4]);
+                task.setStartTime(LocalDateTime.parse(split[5]));
+                task.setDuration(Duration.ofMinutes(Integer.parseInt(split[6])));
                 return task;
             default:
                 return null;

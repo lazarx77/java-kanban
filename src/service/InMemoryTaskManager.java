@@ -5,6 +5,9 @@ import model.Subtask;
 import model.Task;
 import model.TaskStatus;
 
+import javax.swing.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +50,7 @@ public class InMemoryTaskManager implements TaskManager {
         int epicId = subtask.getEpicId();
         Epic epic = epics.get(epicId);
         epic.addSubtasksIds(id);
+        setEpicStart(epicId);
         setEpicStatus(epicId);
 
         return subtasks.get(id);
@@ -250,4 +254,31 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(TaskStatus.IN_PROGRESS);
         }
     }
+
+    private void setEpicStart(int id) {
+        Epic epic = epics.get(id);
+        subtasksIds = epic.getSubtasksIds();
+        Duration epicDuration = Duration.ZERO;
+        LocalDateTime startTime = LocalDateTime.of(3000,10,10,10,10);
+        for (int subtaskId : subtasksIds) {
+            Subtask subtask = subtasks.get(subtaskId);
+            LocalDateTime middleStartTime = subtask.getStartTime();
+            if (middleStartTime != null && middleStartTime.isBefore(startTime)) {
+                startTime = middleStartTime;
+            }
+            epicDuration = epicDuration.plusMinutes(subtask.getDuration().toMinutes());
+        }
+        epic.setStartTime(startTime);
+        epic.setDuration(epicDuration);
+        LocalDateTime epicEndTime = epic.getStartTime().plusMinutes(epic.getDuration().toMinutes());
+        epic.setEndTime(epicEndTime);
+    }
+
+//    private void setEpicDuration(int id) {
+//        Epic epic = epics.get(id);
+//        subtasksIds = epic.getSubtasksIds();
+//        for (int subtaskId : subtasksIds) {
+//
+//        }
+//    }
 }
