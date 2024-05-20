@@ -8,6 +8,7 @@ import service.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class TaskManagerTest {
         task1.setTaskName("task1_name");
         task1.setDescription("task1_description");
         task1.setStatus(TaskStatus.NEW);
-        task1.setDuration(30);
+        task1.setDuration(Duration.ofMinutes(30));
         task1.setStartTime(LocalDateTime.of(2022,12,1,10,10,0));
         task1 = fm.createNewTask(task1);
         File saveFile = FileBackedTaskManager.getSaveFile();
@@ -68,7 +69,7 @@ public class TaskManagerTest {
         task1.setTaskName("task1_name");
         task1.setDescription("task1_description");
         task1.setStatus(TaskStatus.NEW);
-        task1.setDuration(30);
+        task1.setDuration(Duration.ofMinutes(30));
         task1.setStartTime(LocalDateTime.of(2022,12,1,10,10,0));
         task1 = fm.createNewTask(task1);
 
@@ -81,7 +82,7 @@ public class TaskManagerTest {
         subtask1.setTaskName("subtask1");
         subtask1.setDescription("subtask1_description");
         subtask1.setStatus(TaskStatus.NEW);
-        subtask1.setDuration(15);
+        subtask1.setDuration(Duration.ofMinutes(15));
         subtask1.setStartTime(LocalDateTime.of(2022,12,1,10,10,0));
         subtask1.setEpicId(epic1.getId());
         subtask1 = fm.createNewSubtask(subtask1);
@@ -90,7 +91,7 @@ public class TaskManagerTest {
         subtask2.setTaskName("subtask2");
         subtask2.setDescription("subtask2_description");
         subtask2.setStatus(TaskStatus.DONE);
-        subtask2.setDuration(20);
+        subtask2.setDuration(Duration.ofMinutes(20));
         subtask2.setStartTime(LocalDateTime.of(2022,12,1,10,25,0));
         subtask2.setEpicId(epic1.getId());
         subtask2 = fm.createNewSubtask(subtask2);
