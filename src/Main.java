@@ -23,7 +23,7 @@ public class Main {
         task1.setDescription("task1_description");
         task1.setStatus(TaskStatus.NEW);
         task1.setDuration(Duration.ofMinutes(30));
-        task1.setStartTime(LocalDateTime.of(2024, 10, 10, 10, 10));
+        task1.setStartTime(LocalDateTime.of(2024, 12, 10, 10, 10));
         task1 = taskManager.createNewTask(task1);
 
 

@@ -20,9 +20,9 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Epic> epics;
     protected List<Integer> subtasksIds = new ArrayList<>();
     protected HistoryManager historyManager = Managers.getDefaultHistory();
-    private final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime,
-            Comparator.naturalOrder())
-    );
+    private final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+    //,
+           // Comparator.naturalOrder()));
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
