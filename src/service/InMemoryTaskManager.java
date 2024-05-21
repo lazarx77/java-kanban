@@ -24,6 +24,26 @@ public class InMemoryTaskManager implements TaskManager {
     //,
            // Comparator.naturalOrder()));
 
+//    protected boolean validateLocalDataInTasks(Task checkTask) {
+//        if (prioritizedTasks.isEmpty()) {
+//            return;
+//        }
+//        for (Task task : prioritizedTasks) {
+//            if (checkTask.getInstantStartTime() >= task.getInstantStartTime()
+//                    && checkTask.getInstantEndTime() <= task.getInstantEndTime() && checkTask.getStartTime() != null) {
+//                throw new TaskCreationException("Задача:" + checkTask + " попадает в занятый интервал");
+//            }
+//        }
+//    }
+
+
+
+
+
+
+
+
+
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
         this.subtasks = new HashMap<>();
