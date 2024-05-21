@@ -21,7 +21,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected List<Integer> subtasksIds = new ArrayList<>();
     protected HistoryManager historyManager = Managers.getDefaultHistory();
     private final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime,
-                    Comparator.naturalOrder())
+            Comparator.naturalOrder())
     );
 
     public InMemoryTaskManager() {
@@ -81,6 +81,7 @@ public class InMemoryTaskManager implements TaskManager {
     // методы для удаления задач по id
     @Override
     public void deleteTaskById(int id) {
+        prioritizedTasks.remove(tasks.get(id));
         tasks.remove(id);
         historyManager.remove(id);
     }
@@ -96,6 +97,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.clearSubtaskIds();
         historyManager.remove(id);
         epics.remove(id);
+        prioritizedTasks.remove(epic);
     }
 
     @Override
@@ -107,6 +109,7 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager.remove(id);
         subtasks.remove(id);
         setEpicStatus(epicId);
+        prioritizedTasks.remove(subtask);
     }
 
     // методы для очистки задач
@@ -123,6 +126,7 @@ public class InMemoryTaskManager implements TaskManager {
             subtasksIds.clear();
             epic.setStatus(TaskStatus.NEW);
             epics.put(epicId, epic);
+            prioritizedTasks.remove(subtask);
         }
     }
 
@@ -130,6 +134,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void clearAllTasks() {
         for (int id : tasks.keySet()) {
             historyManager.remove(id);
+            prioritizedTasks.remove(tasks.get(id));
         }
         tasks.clear();
     }
@@ -139,6 +144,7 @@ public class InMemoryTaskManager implements TaskManager {
         subtasks.clear();
         for (int id : epics.keySet()) {
             historyManager.remove(id);
+            prioritizedTasks.remove(epics.get(id));
         }
         epics.clear();
     }
@@ -148,6 +154,7 @@ public class InMemoryTaskManager implements TaskManager {
         clearAllTasks();
         clearAllEpics();
         historyManager.clearHistory();
+        prioritizedTasks.clear();
     }
 
     //остальные методы
@@ -255,7 +262,6 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);
     }
-
 
 
     // вспомогательный метод для автоматической установки статуса эпиков

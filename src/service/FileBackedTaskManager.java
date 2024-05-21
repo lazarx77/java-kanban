@@ -31,7 +31,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         task8.setTaskName("task8_name");
         task8.setDescription("task8_description");
         task8.setStatus(TaskStatus.NEW);
-        task8.setStartTime(LocalDateTime.of(2023,12,1,10,11));
+        task8.setStartTime(LocalDateTime.of(2023, 12, 1, 10, 11));
         task8.setDuration(Duration.ofMinutes(10));
         Task fileTask1 = fm.createNewTask(task8);
 
@@ -39,7 +39,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         task9.setTaskName("task9_name");
         task9.setDescription("task9_description");
         task9.setStatus(TaskStatus.IN_PROGRESS);
-        task9.setStartTime(LocalDateTime.of(2022,9,7,5,5));
+        task9.setStartTime(LocalDateTime.of(2022, 9, 7, 5, 5));
         task9.setDuration(Duration.ofMinutes(180));
         Task fileTask2 = fm.createNewTask(task9);
 
@@ -52,7 +52,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         subtask11.setTaskName("subtask11_name");
         subtask11.setDescription("subtask11_description");
         subtask11.setStatus(TaskStatus.NEW);
-        subtask11.setStartTime(LocalDateTime.of(2023,12,1,10,11));
+        subtask11.setStartTime(LocalDateTime.of(2023, 12, 1, 10, 11));
         subtask11.setDuration(Duration.ofMinutes(10));
         subtask11.setEpicId(epic10.getId());
         Subtask fileSubtask1 = fm.createNewSubtask(subtask11);
@@ -61,7 +61,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         subtask12.setTaskName("subtask2_name");
         subtask12.setDescription("subtask2_description");
         subtask12.setStatus(TaskStatus.DONE);
-        subtask12.setStartTime(LocalDateTime.of(2023,12,1,10,21));
+        subtask12.setStartTime(LocalDateTime.of(2023, 12, 1, 10, 21));
         subtask12.setDuration(Duration.ofMinutes(10));
         subtask12.setEpicId(epic10.getId());
         Subtask fileSubtask2 = fm.createNewSubtask(subtask12);
@@ -70,7 +70,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         subtask13.setTaskName("subtask3_name");
         subtask13.setDescription("subtask3_description");
         subtask13.setStatus(TaskStatus.DONE);
-        subtask13.setStartTime(LocalDateTime.of(2023,12,1,10,31));
+        subtask13.setStartTime(LocalDateTime.of(2023, 12, 1, 10, 31));
         subtask13.setDuration(Duration.ofMinutes(10));
         subtask13.setEpicId(epic10.getId());
         Subtask fileSubtask3 = fm.createNewSubtask(subtask13);
@@ -79,7 +79,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         System.out.println(fm.getAllEpics());
         System.out.println(fm.getAllSubtasks());
         System.out.println(fm.getAllSubtasks());
-        fm.deleteTaskById(1);
+        fm.deleteTaskById(2);
         System.out.println(fm.getAllTasks());
 
     }
@@ -222,7 +222,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             } else {
                 result = result + null + ",";
             }
-            if (task.getDuration() !=null) {
+            if (task.getDuration() != null) {
                 result = result + task.getDuration().toMinutes();
             } else {
                 result = result + null;
@@ -235,7 +235,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             } else {
                 result = result + null + ",";
             }
-            if (task.getDuration() !=null) {
+            if (task.getDuration() != null) {
                 result = result + task.getDuration().toMinutes();
             } else {
                 result = result + null;
@@ -249,7 +249,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             } else {
                 result = result + null + ",";
             }
-            if (task.getDuration() !=null) {
+            if (task.getDuration() != null) {
                 result = result + task.getDuration().toMinutes();
             } else {
                 result = result + null;

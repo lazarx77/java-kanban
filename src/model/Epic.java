@@ -50,7 +50,7 @@ public class Epic extends Task {
         endTime = starTime.plusMinutes(duration);
     }
 
-    public LocalDateTime getEpicEndTime(){
+    public LocalDateTime getEpicEndTime() {
         return endTime;
     }
 

@@ -23,7 +23,7 @@ public class Main {
         task1.setDescription("task1_description");
         task1.setStatus(TaskStatus.NEW);
         task1.setDuration(Duration.ofMinutes(30));
-        task1.setStartTime(LocalDateTime.of(2024,10,10,10,10));
+        task1.setStartTime(LocalDateTime.of(2024, 10, 10, 10, 10));
         task1 = taskManager.createNewTask(task1);
 
 
@@ -31,7 +31,7 @@ public class Main {
         task2.setTaskName("task2_name");
         task2.setDescription("task2_description");
         task2.setStatus(TaskStatus.IN_PROGRESS);
-        task2.setStartTime(LocalDateTime.of(2024,10,10,10,15));
+        task2.setStartTime(LocalDateTime.of(2024, 10, 10, 10, 15));
         task2.setDuration(Duration.ofMinutes(20));
         task2 = taskManager.createNewTask(task2);
 
@@ -44,7 +44,7 @@ public class Main {
         subtask1.setTaskName("subtask1_name");
         subtask1.setDescription("subtask1_description");
         subtask1.setStatus(TaskStatus.NEW);
-        subtask1.setStartTime(LocalDateTime.of(2024,10,10,10,15));
+        subtask1.setStartTime(LocalDateTime.of(2024, 10, 10, 10, 15));
         subtask1.setDuration(Duration.ofMinutes(15));
         subtask1.setEpicId(epic1.getId());
         subtask1 = taskManager.createNewSubtask(subtask1);
@@ -53,7 +53,7 @@ public class Main {
         subtask2.setTaskName("subtask2_name");
         subtask2.setDescription("subtask2_description");
         subtask2.setStatus(TaskStatus.DONE);
-        subtask2.setStartTime(LocalDateTime.of(2024,10,10,10,30));
+        subtask2.setStartTime(LocalDateTime.of(2024, 10, 10, 10, 30));
         subtask2.setDuration(Duration.ofMinutes(20));
         subtask2.setEpicId(epic1.getId());
         subtask2 = taskManager.createNewSubtask(subtask2);
@@ -62,7 +62,7 @@ public class Main {
         subtask3.setTaskName("subtask3_name");
         subtask3.setDescription("subtask3_description");
         subtask3.setStatus(TaskStatus.DONE);
-        subtask3.setStartTime(LocalDateTime.of(2024,10,10,10,50));
+        subtask3.setStartTime(LocalDateTime.of(2024, 10, 10, 10, 50));
         subtask3.setDuration(Duration.ofMinutes(20));
         subtask3.setEpicId(epic1.getId());
         subtask3 = taskManager.createNewSubtask(subtask3);
