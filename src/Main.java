@@ -88,6 +88,8 @@ public class Main {
         taskManager.deleteEpic(3);
         taskManager.getEpicById(7);
         System.out.println(historyManager.getHistory());
+        System.out.println(taskManager.getPrioritizedTasks());
+        System.out.println(taskManager.getAllTasks());
     }
 }
 

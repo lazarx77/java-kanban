@@ -33,12 +33,12 @@ public class Subtask extends Task {
         if (startTime != null) {
             result = result + ", startTime= " + startTime.format(formatter);
         } else {
-            result = result + ", startTime= 00:00";
+            result = result + ", startTime= null";
         }
         if (duration != 0) {
             result = result + ", duration= " + duration;
         } else {
-            result = result + ", duration= 0";
+            result = result + ", duration= null";
         }
 
         result = result + ", status=" + getStatus() + " " + "epicId = " + epicId;

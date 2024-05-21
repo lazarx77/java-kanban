@@ -1,5 +1,6 @@
 package service;
 
+import com.sun.source.tree.Tree;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -8,18 +9,20 @@ import model.TaskStatus;
 import javax.swing.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
+
     protected int id = 0;
     protected Map<Integer, Task> tasks;
     protected Map<Integer, Subtask> subtasks;
     protected Map<Integer, Epic> epics;
     protected List<Integer> subtasksIds = new ArrayList<>();
     protected HistoryManager historyManager = Managers.getDefaultHistory();
+    private final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime,
+                    Comparator.naturalOrder())
+    );
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
@@ -34,8 +37,11 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(id);
         epics.put(id, epic);
         epic.setStatus(TaskStatus.NEW);
-        epic.setStartTime(LocalDateTime.now());
-        epic.setDuration(Duration.ZERO);
+//        epic.setStartTime(LocalDateTime.now());
+//        epic.setDuration(Duration.ZERO);
+        if (epic.getStartTime() != null) {
+            prioritizedTasks.add(epic);
+        }
         return epics.get(id);
     }
 
@@ -54,7 +60,10 @@ public class InMemoryTaskManager implements TaskManager {
         epic.addSubtasksIds(id);
         setEpicStart(epicId);
         setEpicStatus(epicId);
-
+        if (subtask.getStartTime() != null) {
+            prioritizedTasks.add(subtask);
+        }
+        //prioritizedTasks.add(epic);
         return subtasks.get(id);
     }
 
@@ -63,6 +72,9 @@ public class InMemoryTaskManager implements TaskManager {
         id++;
         task.setId(id);
         tasks.put(id, task);
+        if (task.getStartTime() != null) {
+            prioritizedTasks.add(task);
+        }
         return tasks.get(id);
     }
 
@@ -239,6 +251,13 @@ public class InMemoryTaskManager implements TaskManager {
         return epicSubtasks;
     }
 
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
+    }
+
+
+
     // вспомогательный метод для автоматической установки статуса эпиков
     private void setEpicStatus(int id) {
         Epic epic = epics.get(id);
@@ -265,22 +284,15 @@ public class InMemoryTaskManager implements TaskManager {
         subtasksIds = epic.getSubtasksIds();
         if (epic.getSubtasksIds() != null) {
             LocalDateTime startTime = subtasksIds.stream().
-                    map(subtaskId -> subtasks.get(subtaskId).
-                            getStartTime()).sorted().findFirst().
-                    orElseGet(null);
-            Duration epicDuration = Duration.ofMinutes(subtasksIds.stream().map(subtaskId -> subtasks.get(subtaskId).getDuration()).map(Duration::toMinutes).reduce(0L, Long::sum));
+                    map(subtaskId -> subtasks.get(subtaskId).getStartTime()).sorted().findFirst().orElse(null);
+            Duration epicDuration = Duration.ofMinutes(subtasksIds.stream().map(subtaskId -> subtasks.get(subtaskId).
+                    getDuration()).map(Duration::toMinutes).reduce(0L, Long::sum));
             epic.setStartTime(startTime);
-            epic.setDuration(epicDuration);
-            LocalDateTime epicEndTime = epic.getStartTime().plusMinutes(epic.getDuration().toMinutes());
-            epic.setEndTime(epicEndTime);
+            if (epicDuration != null && startTime != null) {
+                epic.setDuration(epicDuration);
+                LocalDateTime epicEndTime = epic.getStartTime().plusMinutes(epic.getDuration().toMinutes());
+                epic.setEndTime(epicEndTime);
+            }
         }
     }
-
-//    private void setEpicDuration(int id) {
-//        Epic epic = epics.get(id);
-//        subtasksIds = epic.getSubtasksIds();
-//        for (int subtaskId : subtasksIds) {
-//
-//        }
-//    }
 }

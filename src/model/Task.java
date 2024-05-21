@@ -4,7 +4,9 @@ import service.TaskType;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class Task {
@@ -31,12 +33,12 @@ public class Task {
         if (startTime != null) {
             result = result + ", startTime= " + startTime.format(formatter);
         } else {
-            result = result + ", startTime= 00:00";
+            result = result + ", startTime= null";
         }
         if (duration != 0) {
             result = result + ", duration= " + duration;
         } else {
-            result = result + ", duration= 0";
+            result = result + ", duration= null";
         }
 
         result = result + ", status=" + status + " ";
@@ -47,12 +49,16 @@ public class Task {
         return startTime.plus(Duration.ofMinutes(duration));
     }
 
-        public void setDuration(Duration duration) {
-        this.duration = duration.toMinutes();
+    public void setDuration(Duration duration) {
+        if (duration != null) {
+            this.duration = duration.toMinutes();
+        }
     }
 
     public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
+        if (startTime != null) {
+            this.startTime = startTime;
+        }
     }
 
     public LocalDateTime getStartTime() {
