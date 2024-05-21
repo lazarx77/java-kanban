@@ -18,22 +18,22 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Поехали!");
 
-//        Task task1 = new Task(); // id 1
-//        task1.setTaskName("task1_name");
-//        task1.setDescription("task1_description");
-//        task1.setStatus(TaskStatus.NEW);
-//        task1.setDuration(30);
-//        task1.setStartTime(LocalDateTime.of(2024,10,10,10,10));
-//        task1 = taskManager.createNewTask(task1);
-//
-//
-//        Task task2 = new Task(); // id 2
-//        task2.setTaskName("task2_name");
-//        task2.setDescription("task2_description");
-//        task2.setStatus(TaskStatus.IN_PROGRESS);
-//        task2.setStartTime(LocalDateTime.of(2024,10,10,10,15));
-//        task2.setDuration(20);
-//        task2 = taskManager.createNewTask(task2);
+        Task task1 = new Task(); // id 1
+        task1.setTaskName("task1_name");
+        task1.setDescription("task1_description");
+        task1.setStatus(TaskStatus.NEW);
+        task1.setDuration(Duration.ofMinutes(30));
+        task1.setStartTime(LocalDateTime.of(2024,10,10,10,10));
+        task1 = taskManager.createNewTask(task1);
+
+
+        Task task2 = new Task(); // id 2
+        task2.setTaskName("task2_name");
+        task2.setDescription("task2_description");
+        task2.setStatus(TaskStatus.IN_PROGRESS);
+        task2.setStartTime(LocalDateTime.of(2024,10,10,10,15));
+        task2.setDuration(Duration.ofMinutes(20));
+        task2 = taskManager.createNewTask(task2);
 
         Epic epic1 = new Epic(); // id 3
         epic1.setTaskName("epic1_name");
@@ -67,27 +67,27 @@ public class Main {
         subtask3.setEpicId(epic1.getId());
         subtask3 = taskManager.createNewSubtask(subtask3);
 
-//        Epic epic2 = new Epic(); // id 7
-//        epic2.setTaskName("epic2_name");
-//        epic2.setDescription("epic2_description");
-//        epic2 = taskManager.createNewEpic(epic2);
+        Epic epic2 = new Epic(); // id 7
+        epic2.setTaskName("epic2_name");
+        epic2.setDescription("epic2_description");
+        epic2 = taskManager.createNewEpic(epic2);
 
-//        taskManager.getTaskById(2);
-        System.out.println(taskManager.getEpicById(1));
-//        System.out.println(historyManager.getHistory());
-//        taskManager.getEpicById(3);
-//        System.out.println(historyManager.getHistory());
-//        taskManager.getSubtaskById(4);
-//        System.out.println(historyManager.getHistory());
-//        taskManager.getSubtaskById(6);
-//        System.out.println(historyManager.getHistory());
-//        taskManager.getEpicById(3);
-//        System.out.println(historyManager.getHistory());
-//        taskManager.deleteTaskById(2);
-//        System.out.println(historyManager.getHistory());
-//        taskManager.deleteEpic(3);
-//        taskManager.getEpicById(7);
-//        System.out.println(historyManager.getHistory());
+        taskManager.getTaskById(1);
+        System.out.println(taskManager.getEpicById(3));
+        System.out.println(historyManager.getHistory());
+        taskManager.getEpicById(3);
+        System.out.println(historyManager.getHistory());
+        taskManager.getSubtaskById(4);
+        System.out.println(historyManager.getHistory());
+        taskManager.getSubtaskById(6);
+        System.out.println(historyManager.getHistory());
+        taskManager.getEpicById(3);
+        System.out.println(historyManager.getHistory());
+        taskManager.deleteTaskById(2);
+        System.out.println(historyManager.getHistory());
+        taskManager.deleteEpic(3);
+        taskManager.getEpicById(7);
+        System.out.println(historyManager.getHistory());
     }
 }
 

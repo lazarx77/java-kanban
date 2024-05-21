@@ -15,7 +15,7 @@ public class Task {
     private TaskStatus status;
     long duration;
     LocalDateTime startTime;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+    public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
 
     @Override
     public String toString() {

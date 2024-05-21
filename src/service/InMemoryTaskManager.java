@@ -34,6 +34,8 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(id);
         epics.put(id, epic);
         epic.setStatus(TaskStatus.NEW);
+        epic.setStartTime(LocalDateTime.now());
+        epic.setDuration(Duration.ZERO);
         return epics.get(id);
     }
 
@@ -147,6 +149,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(int id) {
         setEpicStatus(id); // защита от внешнего setStatus для epic - пересчет статуса перед записью в историю
+        setEpicStart(id);
         historyManager.add(epics.get(id));
         return epics.get(id);
     }
@@ -179,6 +182,7 @@ public class InMemoryTaskManager implements TaskManager {
             subtasks.put(id, subtask);
             int epicId = subtask.getEpicId();
             setEpicStatus(epicId);
+            setEpicStart(epicId);
         }
     }
 
@@ -192,6 +196,7 @@ public class InMemoryTaskManager implements TaskManager {
                 epic.addSubtasksIds(subtaskId);
             }
             setEpicStatus(id);
+            setEpicStart(id);
             epics.put(id, epic);
         }
     }
@@ -258,20 +263,17 @@ public class InMemoryTaskManager implements TaskManager {
     private void setEpicStart(int id) {
         Epic epic = epics.get(id);
         subtasksIds = epic.getSubtasksIds();
-        Duration epicDuration = Duration.ZERO;
-        LocalDateTime startTime = LocalDateTime.of(3000,10,10,10,10);
-        for (int subtaskId : subtasksIds) {
-            Subtask subtask = subtasks.get(subtaskId);
-            LocalDateTime middleStartTime = subtask.getStartTime();
-            if (middleStartTime != null && middleStartTime.isBefore(startTime)) {
-                startTime = middleStartTime;
-            }
-            epicDuration = epicDuration.plusMinutes(subtask.getDuration().toMinutes());
+        if (epic.getSubtasksIds() != null) {
+            LocalDateTime startTime = subtasksIds.stream().
+                    map(subtaskId -> subtasks.get(subtaskId).
+                            getStartTime()).sorted().findFirst().
+                    orElseGet(null);
+            Duration epicDuration = Duration.ofMinutes(subtasksIds.stream().map(subtaskId -> subtasks.get(subtaskId).getDuration()).map(Duration::toMinutes).reduce(0L, Long::sum));
+            epic.setStartTime(startTime);
+            epic.setDuration(epicDuration);
+            LocalDateTime epicEndTime = epic.getStartTime().plusMinutes(epic.getDuration().toMinutes());
+            epic.setEndTime(epicEndTime);
         }
-        epic.setStartTime(startTime);
-        epic.setDuration(epicDuration);
-        LocalDateTime epicEndTime = epic.getStartTime().plusMinutes(epic.getDuration().toMinutes());
-        epic.setEndTime(epicEndTime);
     }
 
 //    private void setEpicDuration(int id) {
