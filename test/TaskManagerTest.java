@@ -20,10 +20,10 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     public static TaskManager taskManager = Managers.getDefault();
     public static HistoryManager historyManager = Managers.getDefaultHistory();
-    private final Task task1 = new Task();
-    private final Epic epic1 = new Epic();
-    private final Subtask subtask1 = new Subtask();
-    private final Subtask subtask2 = new Subtask();
+    private Task task1 = new Task();
+    private Epic epic1 = new Epic();
+    private Subtask subtask1 = new Subtask();
+    private Subtask subtask2 = new Subtask();
 
 
 
@@ -38,10 +38,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
         task1.setStatus(TaskStatus.NEW);
         task1.setDuration(Duration.ofMinutes(20));
         task1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 25, 0));
+        task1 = taskManager.createNewTask(task1);
 
         Epic epic1 = new Epic();
         epic1.setTaskName("epic1");
         epic1.setDescription("epic1_description");
+        epic1 = taskManager.createNewEpic(epic1);
+
 
         Subtask subtask1 = new Subtask();
         subtask1.setTaskName("subtask1");
@@ -50,6 +53,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         subtask1.setDuration(Duration.ofMinutes(20));
         subtask1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 25, 0));
         subtask1.setEpicId(epic1.getId());
+        subtask1 = taskManager.createNewSubtask(subtask1);
 
         Subtask subtask2 = new Subtask();
         subtask2.setTaskName("subtask2");
@@ -58,6 +62,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         subtask2.setDuration(Duration.ofMinutes(0));
         subtask2.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 45, 0));
         subtask2.setEpicId(epic1.getId());
+        subtask2 = taskManager.createNewSubtask(subtask2);
 
 
     }
@@ -65,17 +70,13 @@ abstract class TaskManagerTest<T extends TaskManager> {
     // проверьте, что экземпляры класса Task равны друг другу, если равен их id
     @Test
     public void task1ShouldBeEqualToTask1InTaskManager() {
-        taskManager.createNewTask(task1);
         assertEquals(task1, taskManager.getTaskById(1));
     }
 
     // проверьте, что наследники класса Task равны друг другу, если равен их id
     @Test
     public void epic1ShouldBeEqualToEpic1InTaskManager() {
-        Epic testEpic = taskManager.createNewEpic(epic1);
-        taskManager.createNewSubtask(subtask1);
-        taskManager.createNewSubtask(subtask2);
-        assertEquals(testEpic, taskManager.getEpicById(1));
+        assertEquals(epic1, taskManager.getEpicById(2));
     }
 
     @Test
