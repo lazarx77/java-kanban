@@ -46,7 +46,7 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        return startTime.plus(Duration.ofMinutes(duration));
+        return startTime.plus(getDuration());
     }
 
     public void setDuration(Duration duration) {

@@ -12,6 +12,12 @@ public class Epic extends Task {
     //private LocalDateTime starTime;
     private final List<Integer> subtasksIds = new ArrayList<>();
 
+    @Override
+    public LocalDateTime getEndTime() {
+        endTime = super.getEndTime();
+        return endTime;
+    }
+
     public List<Integer> addSubtasksIds(int id) {
         subtasksIds.add(id);
         return subtasksIds;
