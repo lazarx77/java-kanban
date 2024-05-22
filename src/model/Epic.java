@@ -36,21 +36,6 @@ public class Epic extends Task {
         subtasksIds.clear();
     }
 
-//    public void setStartTime(Map<Integer, Subtask> subtasks, List<Integer> subtasksIds) {
-//        starTime = (subtasksIds.stream().map(subtasks::get).map(subtask -> subtask.startTime).min(LocalDateTime::compareTo)).orElse(LocalDateTime.now());
-//    }
-//
-//    public void setDuration(Map<Integer, Subtask> subtasks, List<Integer> subtasksIds){
-//        long middleDuration = 0;
-//        for(Integer subtaskId : subtasksIds) {
-//            middleDuration = middleDuration + subtasks.get(subtaskId).duration;
-//        }
-//        duration = middleDuration;
-//
-//
-//        //return duration = subtasksIds.stream().
-//    }
-
 
     public void setEndTime(LocalDateTime starTime) {
         endTime = starTime.plusMinutes(duration);

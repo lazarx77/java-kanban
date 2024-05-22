@@ -85,7 +85,8 @@ public class Main {
         System.out.println(historyManager.getHistory());
         taskManager.deleteTaskById(2);
         System.out.println(historyManager.getHistory());
-        taskManager.deleteEpic(3);
+        //taskManager.deleteEpic(3);
+        taskManager.deleteSubtask(5);
         taskManager.getEpicById(7);
         System.out.println(historyManager.getHistory());
         System.out.println(taskManager.getPrioritizedTasks());
