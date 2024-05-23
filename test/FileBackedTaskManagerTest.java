@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FileBackedTaskManagerTest { // extends TaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest {
     public static FileBackedTaskManager fm;// = Managers.getDefaultFileManager();
     File saveFile;
     File testFile;
@@ -40,10 +40,10 @@ class FileBackedTaskManagerTest { // extends TaskManagerTest {
         fm = Managers.getDefaultFileManager();
     }
 
-    @AfterEach
-    public void afterEach() {
-       saveFile.delete();
-    }
+//    @AfterEach
+//    public void afterEach() {
+//       saveFile.delete();
+//    }
 
     // проверяем сохранение задач в отсутствующий/пустой файл
     @Test
