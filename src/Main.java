@@ -31,7 +31,7 @@ public class Main {
         task2.setTaskName("task2_name");
         task2.setDescription("task2_description");
         task2.setStatus(TaskStatus.IN_PROGRESS);
-        task2.setStartTime(LocalDateTime.of(2024, 10, 10, 10, 15));
+        task2.setStartTime(LocalDateTime.of(2024, 12, 10, 10, 10));
         task2.setDuration(Duration.ofMinutes(20));
         task2 = taskManager.createNewTask(task2);
 
@@ -73,21 +73,21 @@ public class Main {
         epic2 = taskManager.createNewEpic(epic2);
 
         taskManager.getTaskById(1);
-        System.out.println(taskManager.getEpicById(3));
+        System.out.println(taskManager.getEpicById(2));
         System.out.println(historyManager.getHistory());
-        taskManager.getEpicById(3);
+        taskManager.getEpicById(2);
         System.out.println(historyManager.getHistory());
-        taskManager.getSubtaskById(4);
+        taskManager.getSubtaskById(3);
         System.out.println(historyManager.getHistory());
-        taskManager.getSubtaskById(6);
+        taskManager.getSubtaskById(5);
         System.out.println(historyManager.getHistory());
-        taskManager.getEpicById(3);
+        taskManager.getEpicById(2);
         System.out.println(historyManager.getHistory());
-        taskManager.deleteTaskById(2);
+        taskManager.deleteTaskById(1);
         System.out.println(historyManager.getHistory());
         //taskManager.deleteEpic(3);
-        taskManager.deleteSubtask(5);
-        taskManager.getEpicById(7);
+        taskManager.deleteSubtask(4);
+        taskManager.getEpicById(6);
         System.out.println(historyManager.getHistory());
         System.out.println(taskManager.getPrioritizedTasks());
         System.out.println(taskManager.getAllTasks());

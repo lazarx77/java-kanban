@@ -40,33 +40,43 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask createNewSubtask(Subtask subtask) {
-        id++;
-        subtask.setId(id);
-        subtasks.put(id, subtask);
-        int epicId = subtask.getEpicId();
-        Epic epic = epics.get(epicId);
-        epic.addSubtasksIds(id);
-        setEpicStart(epicId);
-        setEpicStatus(epicId);
-        if (subtask.getStartTime() == null || !isTimeCross(epic)) {
+        try {
+            subtask.setId(id + 1);
+            int epicId = subtask.getEpicId();
+            Epic epic = epics.get(epicId);
+            if (subtask.getStartTime() != null) {
+                if (!isTimeCross(subtask)) {
+                    prioritizedTasks.add(subtask);
+                } else {
+                    throw new TimeCrossException("");
+                }
+            }
+            id++;
             subtasks.put(id, subtask);
-        }
-        if (subtask.getStartTime() != null) {
-            prioritizedTasks.add(subtask);
+            epic.addSubtasksIds(id);
+            setEpicStart(epicId);
+            setEpicStatus(epicId);
+        } catch (TimeCrossException e) {
+            System.out.println("Задача не добавлена: пересечение задач по времени.");
         }
         return subtasks.get(id);
     }
 
     @Override
     public Task createNewTask(Task task) {
-        id++;
-        task.setId(id);
-        tasks.put(id, task);
-        if (task.getStartTime() == null || !isTimeCross(task)) {
+        try {
+            task.setId(id + 1);
+            if (task.getStartTime() != null) {
+                if (!isTimeCross(task)) {
+                    prioritizedTasks.add(task);
+                } else {
+                    throw new TimeCrossException("");
+                }
+            }
+            id++;
             tasks.put(id, task);
-        }
-        if (task.getStartTime() != null) {
-            prioritizedTasks.add(task);
+        } catch (TimeCrossException e) {
+            System.out.println("Задача не добавлена: пересечение задач по времени.");
         }
         return tasks.get(id);
     }
@@ -193,12 +203,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (tasks.containsKey(id)) {
             if (tasks.get(id).getStartTime() != null && !isTimeCross(task)) {
                 prioritizedTasks.remove(tasks.get(id));
-                if (task.getStartTime() != null && !isTimeCross(task)) {
-                    prioritizedTasks.add(task);
-                    tasks.put(id, task);
-                }
+                prioritizedTasks.add(task);
+                tasks.put(id, task);
             }
-
         }
     }
 
@@ -208,10 +215,8 @@ public class InMemoryTaskManager implements TaskManager {
         if (subtasks.containsKey(id)) {
             if (subtasks.get(id).getStartTime() != null && !isTimeCross(subtask)) {
                 prioritizedTasks.remove(subtasks.get(id));
-                if (subtask.getStartTime() != null && !isTimeCross(subtask)) {
-                    prioritizedTasks.add(subtask);
-                    subtasks.put(id, subtask);
-                }
+                prioritizedTasks.add(subtask);
+                subtasks.put(id, subtask);
             }
 
             int epicId = subtask.getEpicId();
@@ -317,7 +322,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (startTime != null) {
                 Duration epicDuration = Duration.ofMinutes(subtasksIds.stream().
                         map(subtaskId -> subtasks.get(subtaskId).
-                        getDuration()).filter(Objects::nonNull).
+                                getDuration()).filter(Objects::nonNull).
                         map(Duration::toMinutes).
                         reduce(0L, Long::sum));
                 epic.setDuration(epicDuration);
@@ -328,7 +333,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private boolean isTimeCross(Task task) {
-        return prioritizedTasks.stream().anyMatch(pt -> (task.getStartTime() != null) && (task.getDuration() != null)
+        return prioritizedTasks.stream().
+                anyMatch(pt -> (task.getStartTime() != null) && (task.getDuration() != null)
                 && ((task.getEndTime().isAfter(pt.getStartTime()))
                 && (task.getStartTime().isBefore(pt.getEndTime()))));
     }

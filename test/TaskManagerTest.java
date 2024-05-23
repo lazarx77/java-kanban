@@ -51,7 +51,7 @@ abstract class TaskManagerTest {
         task2.setDescription("task2_description");
         task2.setStatus(TaskStatus.IN_PROGRESS);
         task2.setDuration(Duration.ofMinutes(20));
-        task2.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 45, 0));
+        task2.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 50, 0));
         task2 = taskManager.createNewTask(task2);
 
         task3 = new Task();
@@ -59,7 +59,7 @@ abstract class TaskManagerTest {
         task3.setDescription("task3_description");
         task3.setStatus(TaskStatus.IN_PROGRESS);
         task3.setDuration(Duration.ofMinutes(20));
-        task3.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 45, 0));
+        task3.setStartTime(LocalDateTime.of(2022, 12, 1, 11, 50, 0));
         task3 = taskManager.createNewTask(task3);
 
         epic1 = new Epic();
@@ -72,7 +72,7 @@ abstract class TaskManagerTest {
         subtask1.setDescription("subtask1_description");
         subtask1.setStatus(TaskStatus.NEW);
         subtask1.setDuration(Duration.ofMinutes(20));
-        subtask1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 25, 0));
+        subtask1.setStartTime(LocalDateTime.of(2022, 12, 1, 12, 25, 0));
         subtask1.setEpicId(epic1.getId());
         subtask1 = taskManager.createNewSubtask(subtask1);
 
@@ -81,7 +81,7 @@ abstract class TaskManagerTest {
         subtask2.setDescription("subtask2_description");
         subtask2.setStatus(TaskStatus.DONE);
         subtask2.setDuration(Duration.ofMinutes(0));
-        subtask2.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 45, 0));
+        subtask2.setStartTime(LocalDateTime.of(2022, 12, 1, 13, 45, 0));
         subtask2.setEpicId(epic1.getId());
         subtask2 = taskManager.createNewSubtask(subtask2);
 
@@ -95,7 +95,7 @@ abstract class TaskManagerTest {
         subtask3.setDescription("subtask3_description");
         subtask3.setStatus(TaskStatus.DONE);
         subtask3.setDuration(Duration.ofMinutes(10));
-        subtask3.setStartTime(LocalDateTime.of(2022, 12, 1, 11, 25, 0));
+        subtask3.setStartTime(LocalDateTime.of(2022, 12, 1, 14, 25, 0));
         subtask3.setEpicId(epic2.getId());
         subtask3 = taskManager.createNewSubtask(subtask3);
 
@@ -114,7 +114,7 @@ abstract class TaskManagerTest {
         subtask4.setDescription("subtask4_description");
         subtask4.setStatus(TaskStatus.DONE);
         subtask4.setDuration(Duration.ofMinutes(10));
-        subtask4.setStartTime(LocalDateTime.of(2022, 12, 1, 11, 35, 0));
+        subtask4.setStartTime(LocalDateTime.of(2022, 12, 1, 15, 35, 0));
         subtask4.setEpicId(epic4.getId());
         subtask4 = taskManager.createNewSubtask(subtask4);
 
@@ -123,7 +123,7 @@ abstract class TaskManagerTest {
         subtask5.setDescription("subtask5_description");
         subtask5.setStatus(TaskStatus.DONE);
         subtask5.setDuration(Duration.ofMinutes(10));
-        subtask5.setStartTime(LocalDateTime.of(2022, 12, 1, 11, 45, 0));
+        subtask5.setStartTime(LocalDateTime.of(2022, 12, 1, 15, 45, 0));
         subtask5.setEpicId(epic4.getId());
         subtask5 = taskManager.createNewSubtask(subtask5);
 

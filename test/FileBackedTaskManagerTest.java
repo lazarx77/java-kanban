@@ -2,6 +2,7 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 import model.TaskStatus;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,11 +38,12 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
 //    private Task task1 = new Task(); // id 1
     @BeforeEach
     public void beforeEach() {
+        super.beforeEach();
         fm = Managers.getDefaultFileManager();
     }
 
-//    @AfterEach
-//    public void afterEach() {
+//    @AfterAll
+//    public static void afterAll() {
 //       saveFile.delete();
 //    }
 
