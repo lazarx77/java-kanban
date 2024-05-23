@@ -23,7 +23,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         setLoadFile("testFile.csv");
 
-        FileBackedTaskManager fm = new FileBackedTaskManager();
+        FileBackedTaskManager fm = Managers.getDefaultFileManager();
         fm = loadFromFile(loadFile);
 
 

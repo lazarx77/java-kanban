@@ -281,9 +281,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     // вспомогательный метод для автоматической установки статуса эпиков
     private void setEpicStatus(int id) {
+        Epic epic = epics.get(id);
         List<TaskStatus> statusList = epics.get(id).getSubtasksIds().stream().map(subtasks::get).map(Task::getStatus).
                 toList();
-        Epic epic = epics.get(id);
 //        subtasksIds = epic.getSubtasksIds();
 //        List<TaskStatus> statusList = new ArrayList<>();
 //        for (int subtaskId : subtasksIds) {

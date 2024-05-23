@@ -2,12 +2,10 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 import model.TaskStatus;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.FileBackedTaskManager;
-import service.InMemoryTaskManager;
-import service.ManagerSaveException;
-import service.Managers;
+import service.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -18,27 +16,46 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FileBackedTaskManagerTest extends TaskManagerTest <service.FileBackedTaskManager> {
+class FileBackedTaskManagerTest { // extends TaskManagerTest {
+    public static FileBackedTaskManager fm;// = Managers.getDefaultFileManager();
+    File saveFile;
+    File testFile;
 
+    //    @BeforeEach
+//    public void beforeEach() {
+//        taskManager = Managers.getDefault();
+//        //historyManager = Managers.getDefaultHistory();
+//        task1.setTaskName("task1_name");
+//        task1.setDescription("task1_description");
+//        task1.setStatus(TaskStatus.NEW);
+//        task1.setDuration(Duration.ofMinutes(20));
+//        task1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 25, 0));
+//        task1 = taskManager.createNewTask(task1);
+//    }
+//
+//
+//    private Task task1 = new Task(); // id 1
     @BeforeEach
     public void beforeEach() {
-        taskManager = Managers.getDefault();
-        historyManager = Managers.getDefaultHistory();
-        FileBackedTaskManager fm = new FileBackedTaskManager();
+        fm = Managers.getDefaultFileManager();
+    }
+
+    @AfterEach
+    public void afterEach() {
+       saveFile.delete();
     }
 
     // проверяем сохранение задач в отсутствующий/пустой файл
     @Test
     public void fileBackedTaskManagerShouldSaveTasksToNewFile() {
-        FileBackedTaskManager fm = new FileBackedTaskManager();
-        Task task1 = new Task();
-        task1.setTaskName("task1_name");
-        task1.setDescription("task1_description");
-        task1.setStatus(TaskStatus.NEW);
-        task1.setDuration(Duration.ofMinutes(30));
-        task1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 10, 0));
-        task1 = fm.createNewTask(task1);
-        File saveFile = FileBackedTaskManager.getSaveFile();
+        Task fmTask1 = new Task();
+        fmTask1.setTaskName("task1_name");
+        fmTask1.setDescription("task1_description");
+        fmTask1.setStatus(TaskStatus.NEW);
+        fmTask1.setDuration(Duration.ofMinutes(30));
+        fmTask1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 10, 0));
+        fmTask1 = fm.createNewTask(fmTask1);
+        saveFile = FileBackedTaskManager.getSaveFile();
         Task middleTask = null;
         try (BufferedReader fileReader = new BufferedReader(new FileReader(saveFile, StandardCharsets.UTF_8))) {
             BufferedReader br = new BufferedReader(fileReader);
@@ -55,45 +72,44 @@ class FileBackedTaskManagerTest extends TaskManagerTest <service.FileBackedTaskM
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка чтения файла");
         }
-        assertEquals(fm.toString(task1), fm.toString(middleTask));
-        saveFile.delete();
+        assertEquals(fm.toString(fmTask1), fm.toString(middleTask));
     }
 
     // проверяем сохранение задач в отсутствующий/пустой файл
     @Test
     public void fileBackedTaskManagerShouldSaveMultipleTasks() {
-        FileBackedTaskManager fm = new FileBackedTaskManager();
-        Task task1 = new Task();
-        task1.setTaskName("task1_name");
-        task1.setDescription("task1_description");
-        task1.setStatus(TaskStatus.NEW);
-        task1.setDuration(Duration.ofMinutes(30));
-        task1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 10, 0));
-        task1 = fm.createNewTask(task1);
+        //FileBackedTaskManager fm = new FileBackedTaskManager();
+        Task fmTask1 = new Task();
+        fmTask1.setTaskName("task1_name");
+        fmTask1.setDescription("task1_description");
+        fmTask1.setStatus(TaskStatus.NEW);
+        fmTask1.setDuration(Duration.ofMinutes(30));
+        fmTask1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 10, 0));
+        fmTask1 = fm.createNewTask(fmTask1);
 
-        Epic epic1 = new Epic();
-        epic1.setTaskName("epic1");
-        epic1.setDescription("epic1_description");
-        epic1 = fm.createNewEpic(epic1);
+        Epic fmEpic1 = new Epic();
+        fmEpic1.setTaskName("epic1");
+        fmEpic1.setDescription("epic1_description");
+        fmEpic1 = fm.createNewEpic(fmEpic1);
 
-        Subtask subtask1 = new Subtask();
-        subtask1.setTaskName("subtask1");
-        subtask1.setDescription("subtask1_description");
-        subtask1.setStatus(TaskStatus.NEW);
-        subtask1.setDuration(Duration.ofMinutes(15));
-        subtask1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 10, 0));
-        subtask1.setEpicId(epic1.getId());
-        subtask1 = fm.createNewSubtask(subtask1);
+        Subtask fmSubtask1 = new Subtask();
+        fmSubtask1.setTaskName("subtask1");
+        fmSubtask1.setDescription("subtask1_description");
+        fmSubtask1.setStatus(TaskStatus.NEW);
+        fmSubtask1.setDuration(Duration.ofMinutes(15));
+        fmSubtask1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 10, 0));
+        fmSubtask1.setEpicId(fmEpic1.getId());
+        fmSubtask1 = fm.createNewSubtask(fmSubtask1);
 
-        Subtask subtask2 = new Subtask();
-        subtask2.setTaskName("subtask2");
-        subtask2.setDescription("subtask2_description");
-        subtask2.setStatus(TaskStatus.DONE);
-        subtask2.setDuration(Duration.ofMinutes(20));
-        subtask2.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 25, 0));
-        subtask2.setEpicId(epic1.getId());
-        subtask2 = fm.createNewSubtask(subtask2);
-        File saveFile = FileBackedTaskManager.getSaveFile();
+        Subtask fmSubtask2 = new Subtask();
+        fmSubtask2.setTaskName("subtask2");
+        fmSubtask2.setDescription("subtask2_description");
+        fmSubtask2.setStatus(TaskStatus.DONE);
+        fmSubtask2.setDuration(Duration.ofMinutes(20));
+        fmSubtask2.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 25, 0));
+        fmSubtask2.setEpicId(fmEpic1.getId());
+        fmSubtask2 = fm.createNewSubtask(fmSubtask2);
+        saveFile = FileBackedTaskManager.getSaveFile();
 
         List<String> taskStings = new ArrayList<>();
         try (BufferedReader fileReader = new BufferedReader(new FileReader(saveFile, StandardCharsets.UTF_8))) {
@@ -119,8 +135,8 @@ class FileBackedTaskManagerTest extends TaskManagerTest <service.FileBackedTaskM
 
     @Test
     public void fileBackedTaskManagerShouldLoadMultipleTasks() {
-        FileBackedTaskManager fm = new FileBackedTaskManager();
-        File testFile = FileBackedTaskManager.setLoadFile("tempTestFile.csv");
+        //FileBackedTaskManager fm = new FileBackedTaskManager();
+        testFile = FileBackedTaskManager.setLoadFile("tempTestFile.csv");
 
         try (Writer fw = new FileWriter(testFile)) {
             fw.write("id,type,name,status,description,epic,date-time,duration\n" +
@@ -133,7 +149,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest <service.FileBackedTaskM
         }
         fm = FileBackedTaskManager.loadFromFile(testFile);
         fm.save();
-        File saveFile = FileBackedTaskManager.getSaveFile();
+        saveFile = FileBackedTaskManager.getSaveFile();
 
         List<String> taskStings = new ArrayList<>();
         try (BufferedReader fileReader = new BufferedReader(new FileReader(saveFile, StandardCharsets.UTF_8))) {
