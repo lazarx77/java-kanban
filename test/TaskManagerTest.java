@@ -4,17 +4,15 @@ import model.Task;
 import model.TaskStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.*;
+import service.Managers;
+import service.TaskManager;
+import service.TimeCrossException;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 abstract class TaskManagerTest {
 
@@ -23,7 +21,7 @@ abstract class TaskManagerTest {
     //protected T taskManager;
     protected Task task1; // id 1
     protected Task task2; // = new Task(); // id 2
-    protected Task task3;
+    protected Task task3; // id 3
     protected Epic epic1; // = new Epic(); // id 4
     protected Subtask subtask1; // = new Subtask(); // id 5
     protected Subtask subtask2; // = new Subtask(); // id 6
@@ -126,8 +124,6 @@ abstract class TaskManagerTest {
         subtask5.setStartTime(LocalDateTime.of(2022, 12, 1, 15, 45, 0));
         subtask5.setEpicId(epic4.getId());
         subtask5 = taskManager.createNewSubtask(subtask5);
-
-
     }
 
     // проверьте, что экземпляры класса Task равны друг другу, если равен их id
@@ -137,6 +133,7 @@ abstract class TaskManagerTest {
     }
 
     // проверьте, что наследники класса Task равны друг другу, если равен их id
+
     @Test
     public void epic1ShouldBeEqualToEpic1InTaskManager() {
         assertEquals(epic1, taskManager.getEpicById(4));
@@ -147,29 +144,8 @@ abstract class TaskManagerTest {
         assertEquals(subtask1, taskManager.getSubtaskById(5));
     }
 
-    // проверьте, что объект Epic нельзя добавить в самого себя в виде подзадачи
-
-//    @Test
-//    public void epic1ShouldNotBeItsOwnSubtask(){ // метод не будет работать
-//        subtask1 = taskManager.createNewSubtask(epic1); // не скомпилируется, так как createNewSubtask
-    //принимает только объекты Subtask
-//        assertEquals(subtask1, taskManager.getSubtaskById(2));
-//    }
-
-    // проверьте, что объект Subtask нельзя сделать своим же эпиком
-
-//    @Test
-//    public void subtask1ShouldBeItsOwnEpic(){ // метод не будет работать
-//        subtask2.setEpicId(5); // подставляет id subtask2 в качестве номера epic
-//        subtask2 = taskManager.createNewSubtask(subtask2); // в методе createNewSubtask требуется экземпляр Epic epic,
-//        // который будет равен null
-//        assertEquals(subtask1, taskManager.getSubtaskById(2));
-//    }
-
-    // убедитесь, что утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров
-
-
     // проверьте, что InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id
+
     @Test
     public void inMemoryTaskManagerAddsDifferentTaskTypesAndCanGetThemByIds() {
         assertEquals("task1_name", task1.getTaskName(1));
@@ -177,7 +153,7 @@ abstract class TaskManagerTest {
         assertEquals("epic4_name", epic4.getTaskName(10));
         assertEquals("subtask5_name", subtask5.getTaskName(12));
         String epic1String = "Epic{id='4 , taskName= epic1_name , description.length=17, startTime= 01.12.2022 - " +
-                "10:25, duration= 20, status=IN_PROGRESS subtasksIds= [5, 6]}";
+                "12:25, duration= 20, status=IN_PROGRESS subtasksIds= [5, 6]}";
         assertEquals(epic1String, taskManager.getEpicById(4).toString());
     }
 
@@ -198,7 +174,19 @@ abstract class TaskManagerTest {
         assertEquals(epic4.getStatus(), subtask5.getStatus());
     }
 
+    @Test
+    public void timeCrossExceptionShouldBeThrownIfTasksTimeCross() {
+        task2 = new Task();
+        task2.setTaskName("task2_name");
+        task2.setDescription("task2_description");
+        task2.setStatus(TaskStatus.IN_PROGRESS);
+        task2.setDuration(Duration.ofMinutes(20));
+        task2.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 25, 0));
 
+        assertThrows(TimeCrossException.class, () -> {
+            task2 = taskManager.createNewTask(task2);
+        }, "Задача не добавлена: пересечение задач по времени.");
+    }
 }
 
 

@@ -1,16 +1,13 @@
 package service;
 
-import com.sun.source.tree.Tree;
 import model.Epic;
 import model.Subtask;
 import model.Task;
 import model.TaskStatus;
 
-import javax.swing.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -57,7 +54,7 @@ public class InMemoryTaskManager implements TaskManager {
             setEpicStart(epicId);
             setEpicStatus(epicId);
         } catch (TimeCrossException e) {
-            System.out.println("Задача не добавлена: пересечение задач по времени.");
+            throw new TimeCrossException("Задача не добавлена: пересечение задач по времени.");
         }
         return subtasks.get(id);
     }
@@ -76,7 +73,7 @@ public class InMemoryTaskManager implements TaskManager {
             id++;
             tasks.put(id, task);
         } catch (TimeCrossException e) {
-            System.out.println("Задача не добавлена: пересечение задач по времени.");
+            throw new TimeCrossException("Задача не добавлена: пересечение задач по времени.");
         }
         return tasks.get(id);
     }
@@ -199,29 +196,43 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
-        int id = task.getId();
-        if (tasks.containsKey(id)) {
-            if (tasks.get(id).getStartTime() != null && !isTimeCross(task)) {
-                prioritizedTasks.remove(tasks.get(id));
-                prioritizedTasks.add(task);
-                tasks.put(id, task);
+        try {
+            if (task.getStartTime() != null) {
+                if (prioritizedTasks.contains(task)) {
+                    prioritizedTasks.remove(tasks.get(task.getId()));
+                }
+                if (!isTimeCross(task)) {
+                    prioritizedTasks.add(task);
+                } else {
+                    throw new TimeCrossException("");
+                }
             }
+            tasks.put(task.getId(), task);
+        } catch (TimeCrossException e) {
+            throw new TimeCrossException("Задача не обновлена: пересечение задач по времени.");
         }
     }
 
     @Override
     public void updateSubTask(Subtask subtask) {
-        int id = subtask.getId();
-        if (subtasks.containsKey(id)) {
-            if (subtasks.get(id).getStartTime() != null && !isTimeCross(subtask)) {
-                prioritizedTasks.remove(subtasks.get(id));
-                prioritizedTasks.add(subtask);
-                subtasks.put(id, subtask);
+        try {
+            if (subtask.getStartTime() != null) {
+                if (prioritizedTasks.contains(subtask)) {
+                    prioritizedTasks.remove(subtasks.get(subtask.getId()));
+                }
+                if (!isTimeCross(subtask)) {
+                    prioritizedTasks.add(subtask);
+                } else {
+                    throw new TimeCrossException("");
+                }
             }
-
+            id++;
+            tasks.put(id, subtask);
             int epicId = subtask.getEpicId();
             setEpicStatus(epicId);
             setEpicStart(epicId);
+        } catch (TimeCrossException e) {
+            throw new TimeCrossException("Задача не добавлена: пересечение задач по времени.");
         }
     }
 
@@ -242,41 +253,21 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getAllTasks() {
-//        List<Task> tasksList = new ArrayList<>();
-        //        for (Task task : tasks.values()) {
-//            tasksList.add(task);
-//        }
         return new ArrayList<>(tasks.values());
     }
 
     @Override
     public List<Epic> getAllEpics() {
-//        ArrayList<Epic> epicsList = new ArrayList<>();
-//        for (Epic epic : epics.values()) {
-//            epicsList.add(epic);
-//        }
         return new ArrayList<>(epics.values());
     }
 
     @Override
     public List<Subtask> getAllSubtasks() {
-//        List<Subtask> subtasksList = new ArrayList<>();
-//        for (Subtask subtask : subtasks.values()) {
-//            subtasksList.add(subtask);
-//        }
         return new ArrayList<>(subtasks.values());
     }
 
     @Override
     public List<Subtask> getEpicSubtasks(int id) {
-//        new ArrayList<>(epics.get(id).getSubtasksIds()).stream().map(subtasksId -> subtasks.get(subtasksId)).collect(Collectors.toList());
-//
-//        Epic epic = epics.get(id);
-//        List<Subtask> epicSubtasks = new ArrayList<>();
-//        subtasksIds = epic.getSubtasksIds();
-//        for (int subtasksIds : subtasksIds) {
-//            epicSubtasks.add(subtasks.get(subtasksIds));
-//        }
         return epics.get(id).getSubtasksIds().stream().map(subtasks::get).toList();
     }
 
@@ -291,13 +282,6 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(id);
         List<TaskStatus> statusList = epics.get(id).getSubtasksIds().stream().map(subtasks::get).map(Task::getStatus).
                 toList();
-//        subtasksIds = epic.getSubtasksIds();
-//        List<TaskStatus> statusList = new ArrayList<>();
-//        for (int subtaskId : subtasksIds) {
-//            Subtask subtask = subtasks.get(subtaskId);
-//            TaskStatus subTaskStatus = subtask.getStatus();
-//            statusList.add(subTaskStatus);
-//        }
         if (statusList.contains(TaskStatus.NEW) && !statusList.contains(TaskStatus.DONE) &&
                 !statusList.contains(TaskStatus.IN_PROGRESS)) {
             epic.setStatus(TaskStatus.NEW);
@@ -335,7 +319,7 @@ public class InMemoryTaskManager implements TaskManager {
     private boolean isTimeCross(Task task) {
         return prioritizedTasks.stream().
                 anyMatch(pt -> (task.getStartTime() != null) && (task.getDuration() != null)
-                && ((task.getEndTime().isAfter(pt.getStartTime()))
-                && (task.getStartTime().isBefore(pt.getEndTime()))));
+                        && ((task.getEndTime().isAfter(pt.getStartTime()))
+                        && (task.getStartTime().isBefore(pt.getEndTime()))));
     }
 }

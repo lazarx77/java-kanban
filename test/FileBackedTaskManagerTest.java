@@ -2,11 +2,11 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 import model.TaskStatus;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.*;
+import service.FileBackedTaskManager;
+import service.ManagerSaveException;
+import service.Managers;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -16,38 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FileBackedTaskManagerTest extends TaskManagerTest {
-    public static FileBackedTaskManager fm;// = Managers.getDefaultFileManager();
+    public static FileBackedTaskManager fm;
     File saveFile;
     File testFile;
 
-    //    @BeforeEach
-//    public void beforeEach() {
-//        taskManager = Managers.getDefault();
-//        //historyManager = Managers.getDefaultHistory();
-//        task1.setTaskName("task1_name");
-//        task1.setDescription("task1_description");
-//        task1.setStatus(TaskStatus.NEW);
-//        task1.setDuration(Duration.ofMinutes(20));
-//        task1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 25, 0));
-//        task1 = taskManager.createNewTask(task1);
-//    }
-//
-//
-//    private Task task1 = new Task(); // id 1
     @BeforeEach
     public void beforeEach() {
         super.beforeEach();
         fm = Managers.getDefaultFileManager();
     }
 
-//    @AfterAll
-//    public static void afterAll() {
-//       saveFile.delete();
-//    }
-
     // проверяем сохранение задач в отсутствующий/пустой файл
+
     @Test
     public void fileBackedTaskManagerShouldSaveTasksToNewFile() {
         Task fmTask1 = new Task();
@@ -80,13 +63,12 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
     // проверяем сохранение задач в отсутствующий/пустой файл
     @Test
     public void fileBackedTaskManagerShouldSaveMultipleTasks() {
-        //FileBackedTaskManager fm = new FileBackedTaskManager();
         Task fmTask1 = new Task();
         fmTask1.setTaskName("task1_name");
         fmTask1.setDescription("task1_description");
         fmTask1.setStatus(TaskStatus.NEW);
         fmTask1.setDuration(Duration.ofMinutes(30));
-        fmTask1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 10, 0));
+        fmTask1.setStartTime(LocalDateTime.of(2023, 12, 7, 10, 10, 0));
         fmTask1 = fm.createNewTask(fmTask1);
 
         Epic fmEpic1 = new Epic();
@@ -99,7 +81,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
         fmSubtask1.setDescription("subtask1_description");
         fmSubtask1.setStatus(TaskStatus.NEW);
         fmSubtask1.setDuration(Duration.ofMinutes(15));
-        fmSubtask1.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 10, 0));
+        fmSubtask1.setStartTime(LocalDateTime.of(2023, 12, 8, 10, 10, 0));
         fmSubtask1.setEpicId(fmEpic1.getId());
         fmSubtask1 = fm.createNewSubtask(fmSubtask1);
 
@@ -108,7 +90,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
         fmSubtask2.setDescription("subtask2_description");
         fmSubtask2.setStatus(TaskStatus.DONE);
         fmSubtask2.setDuration(Duration.ofMinutes(20));
-        fmSubtask2.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 25, 0));
+        fmSubtask2.setStartTime(LocalDateTime.of(2023, 12, 9, 10, 25, 0));
         fmSubtask2.setEpicId(fmEpic1.getId());
         fmSubtask2 = fm.createNewSubtask(fmSubtask2);
         saveFile = FileBackedTaskManager.getSaveFile();
@@ -130,14 +112,14 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
             throw new ManagerSaveException("Ошибка чтения файла");
         }
         assertEquals(taskStings.toString(), "[1,TASK,task1_name,NEW,task1_description,01.12.2022 - 10:10,30, " +
-                "2,EPIC,epic1,IN_PROGRESS,epic1_description,01.12.2022 - 10:10,35, 3,SUBTASK,subtask1," +
-                "NEW,subtask1_description,2,01.12.2022 - 10:10,15, 4,SUBTASK,subtask2,DONE,subtask2_description," +
-                "2,01.12.2022 - 10:25,20]");
+                "2,TASK,task1_name,NEW,task1_description,07.12.2023 - 10:10,30, 3,EPIC,epic1,IN_PROGRESS," +
+                "epic1_description,08.12.2023 - 10:10,35, 4,SUBTASK,subtask1,NEW,subtask1_description,3," +
+                "08.12.2023 - 10:10,15, 5,SUBTASK,subtask2,DONE,subtask2_description,3,09.12.2023 - 10:25,20]");
+        saveFile.delete();
     }
 
     @Test
     public void fileBackedTaskManagerShouldLoadMultipleTasks() {
-        //FileBackedTaskManager fm = new FileBackedTaskManager();
         testFile = FileBackedTaskManager.setLoadFile("tempTestFile.csv");
 
         try (Writer fw = new FileWriter(testFile)) {
@@ -174,7 +156,14 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
                 "NEW,subtask1_description,2,01.12.2022 - 10:10,15, 4,SUBTASK,subtask2,DONE,subtask2_description," +
                 "2,01.12.2022 - 10:25,20]");
         testFile.delete();
+        saveFile.delete();
     }
 
-
+    @Test
+    public void managerSaveExceptionShouldBeThrownIfLoadFileIsNotPresent() {
+        File nonExistent = FileBackedTaskManager.setLoadFile("nonExistent.csv");
+        assertThrows(ManagerSaveException.class, () -> {
+            FileBackedTaskManager.loadFromFile(nonExistent);
+        }, "Ошибка чтения файла в loadFromFile");
+    }
 }

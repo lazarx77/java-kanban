@@ -4,8 +4,7 @@ public final class Managers {
 
     private static TaskManager taskManager;
     private static HistoryManager historyManager = new InMemoryHistoryManager();
-
-    private static FileBackedTaskManager fileManager; // = new FileBackedTaskManager();
+    private static FileBackedTaskManager fileManager = new FileBackedTaskManager();
 
     public static TaskManager getDefault() {
         taskManager = new InMemoryTaskManager();
@@ -18,7 +17,7 @@ public final class Managers {
     }
 
     public static FileBackedTaskManager getDefaultFileManager() {
-        return fileManager = new FileBackedTaskManager();
+        return fileManager;
     }
 
 }
