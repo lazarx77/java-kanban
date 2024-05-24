@@ -280,8 +280,8 @@ public class InMemoryTaskManager implements TaskManager {
     // вспомогательный метод для автоматической установки статуса эпиков
     private void setEpicStatus(int id) {
         Epic epic = epics.get(id);
-        List<TaskStatus> statusList = epics.get(id).getSubtasksIds().stream().map(subtasks::get).map(Task::getStatus).
-                toList();
+        List<TaskStatus> statusList = epics.get(id).getSubtasksIds().stream().map(subtasks::get).map(Task::getStatus)
+                .toList();
         if (statusList.contains(TaskStatus.NEW) && !statusList.contains(TaskStatus.DONE) &&
                 !statusList.contains(TaskStatus.IN_PROGRESS)) {
             epic.setStatus(TaskStatus.NEW);
@@ -297,18 +297,17 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(id);
         subtasksIds = epic.getSubtasksIds();
         if (epic.getSubtasksIds() != null) {
-            LocalDateTime startTime = subtasksIds.stream().
-                    map(subtaskId -> subtasks.get(subtaskId).getStartTime()).
-                    filter(Objects::nonNull).sorted().
-                    findFirst().orElse(null);
+            LocalDateTime startTime = subtasksIds.stream()
+                    .map(subtaskId -> subtasks.get(subtaskId).getStartTime())
+                    .filter(Objects::nonNull).sorted()
+                    .findFirst().orElse(null);
             //в логике кода null - тоже результат
             epic.setStartTime(startTime);
             if (startTime != null) {
-                Duration epicDuration = Duration.ofMinutes(subtasksIds.stream().
-                        map(subtaskId -> subtasks.get(subtaskId).
-                                getDuration()).filter(Objects::nonNull).
-                        map(Duration::toMinutes).
-                        reduce(0L, Long::sum));
+                Duration epicDuration = Duration.ofMinutes(subtasksIds.stream()
+                        .map(subtaskId -> subtasks.get(subtaskId).getDuration()).filter(Objects::nonNull)
+                        .map(Duration::toMinutes)
+                        .reduce(0L, Long::sum));
                 epic.setDuration(epicDuration);
                 LocalDateTime epicEndTime = epic.getStartTime().plusMinutes(epic.getDuration().toMinutes());
                 epic.setEndTime(epicEndTime);
