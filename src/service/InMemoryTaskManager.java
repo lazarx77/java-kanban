@@ -316,8 +316,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private boolean isTimeCross(Task task) {
-        return prioritizedTasks.stream().
-                anyMatch(pt -> (task.getStartTime() != null) && (task.getDuration() != null)
+        return prioritizedTasks.stream()
+                .anyMatch(pt -> (task.getStartTime() != null) && (task.getDuration() != null)
                         && ((task.getEndTime().isAfter(pt.getStartTime()))
                         && (task.getStartTime().isBefore(pt.getEndTime()))));
     }
