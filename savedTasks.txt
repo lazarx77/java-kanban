@@ -3,3 +3,4 @@ id,type,name,status,description,epic,date-time,duration
 2,EPIC,epic1,IN_PROGRESS,epic1_description,01.12.2022 - 10:10,35
 3,SUBTASK,subtask1,NEW,subtask1_description,2,01.12.2022 - 10:10,15
 4,SUBTASK,subtask2,DONE,subtask2_description,2,01.12.2022 - 10:25,20
+5,SUBTASK,subtask2,DONE,subtask2_description,2,02.12.2022 - 10:25,20
