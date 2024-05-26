@@ -17,7 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Epic> epics;
     protected List<Integer> subtasksIds = new ArrayList<>();
     protected HistoryManager historyManager = Managers.getDefaultHistory();
-    private final Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
+    protected Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
@@ -263,6 +263,13 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(prioritizedTasks);
     }
 
+    //метод для нахождения пересечения задач по времени
+    protected boolean isTimeCross(Task task) {
+        return prioritizedTasks.stream()
+                .anyMatch(pt -> (task.getStartTime() != null) && (task.getDuration() != null)
+                        && ((task.getEndTime().isAfter(pt.getStartTime()))
+                        && (task.getStartTime().isBefore(pt.getEndTime()))));
+    }
 
     // вспомогательный метод для автоматической установки статуса эпиков
     private void setEpicStatus(int id) {
@@ -301,13 +308,5 @@ public class InMemoryTaskManager implements TaskManager {
                 epic.setEndTime(epicEndTime);
             }
         }
-    }
-
-    //метод для нахождения пересечения задач по времени
-    private boolean isTimeCross(Task task) {
-        return prioritizedTasks.stream()
-                .anyMatch(pt -> (task.getStartTime() != null) && (task.getDuration() != null)
-                        && ((task.getEndTime().isAfter(pt.getStartTime()))
-                        && (task.getStartTime().isBefore(pt.getEndTime()))));
     }
 }

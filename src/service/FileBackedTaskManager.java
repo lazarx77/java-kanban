@@ -31,7 +31,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         task8.setTaskName("task8_name");
         task8.setDescription("task8_description");
         task8.setStatus(TaskStatus.NEW);
-        task8.setStartTime(LocalDateTime.of(2023, 12, 1, 10, 11));
+        task8.setStartTime(LocalDateTime.of(2023, 12, 15, 10, 11));
         task8.setDuration(Duration.ofMinutes(10));
         Task fileTask1 = fm.createNewTask(task8);
 
@@ -52,16 +52,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         subtask11.setTaskName("subtask11_name");
         subtask11.setDescription("subtask11_description");
         subtask11.setStatus(TaskStatus.NEW);
-        subtask11.setStartTime(LocalDateTime.of(2023, 12, 1, 10, 11));
+        subtask11.setStartTime(LocalDateTime.of(2023, 12, 2, 10, 11));
         subtask11.setDuration(Duration.ofMinutes(10));
         subtask11.setEpicId(epic10.getId());
-//        Subtask fileSubtask1 = fm.createNewSubtask(subtask11);
+        Subtask fileSubtask1 = fm.createNewSubtask(subtask11);
 
         Subtask subtask12 = new Subtask(); // id 12
         subtask12.setTaskName("subtask2_name");
         subtask12.setDescription("subtask2_description");
         subtask12.setStatus(TaskStatus.DONE);
-        subtask12.setStartTime(LocalDateTime.of(2023, 12, 1, 10, 21));
+        subtask12.setStartTime(LocalDateTime.of(2023, 12, 16, 10, 21));
         subtask12.setDuration(Duration.ofMinutes(10));
         subtask12.setEpicId(epic10.getId());
         Subtask fileSubtask2 = fm.createNewSubtask(subtask12);
@@ -70,7 +70,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         subtask13.setTaskName("subtask3_name");
         subtask13.setDescription("subtask3_description");
         subtask13.setStatus(TaskStatus.DONE);
-        subtask13.setStartTime(LocalDateTime.of(2023, 12, 1, 10, 31));
+        subtask13.setStartTime(LocalDateTime.of(2024, 5, 1, 10, 31));
         subtask13.setDuration(Duration.ofMinutes(10));
         subtask13.setEpicId(epic10.getId());
         Subtask fileSubtask3 = fm.createNewSubtask(subtask13);
@@ -338,9 +338,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             middleFm.epics.put(task.getId(), (Epic) task);
                             break;
                         case SUBTASK:
+                            if (task.getStartTime() != null) {
+                                if (!middleFm.isTimeCross(task)) {
+                                    middleFm.prioritizedTasks.add((Subtask) task);
+                                } else {
+                                    throw new TimeCrossException("Задача " + task.getId() + " не добавлена: " +
+                                            "пересечение задач по времени.");
+                                }
+                            }
                             middleFm.subtasks.put(task.getId(), (Subtask) task);
                             break;
                         default:
+                            if (task.getStartTime() != null) {
+                                if (!middleFm.isTimeCross(task)) {
+                                    middleFm.prioritizedTasks.add(task);
+                                } else {
+                                    throw new TimeCrossException("Задача " + task.getId() + " не добавлена: " +
+                                            "пересечение задач по времени.");
+                                }
+                            }
                             middleFm.tasks.put(task.getId(), task);
                             break;
                     }
