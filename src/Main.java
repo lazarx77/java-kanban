@@ -32,7 +32,7 @@ public class Main {
         task2.setStatus(TaskStatus.IN_PROGRESS);
         task2.setStartTime(LocalDateTime.of(2024, 12, 10, 10, 10));
         task2.setDuration(Duration.ofMinutes(20));
-        //task2 = taskManager.createNewTask(task2);
+        task2 = taskManager.createNewTask(task2);
 
         Epic epic1 = new Epic(); // id 3
         epic1.setTaskName("epic1_name");

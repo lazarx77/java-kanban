@@ -9,8 +9,6 @@ import java.util.List;
 public class Epic extends Task {
     private Integer id;
     private LocalDateTime endTime;
-    //private long duration;
-    //private LocalDateTime starTime;
     private final List<Integer> subtasksIds = new ArrayList<>();
 
     @Override

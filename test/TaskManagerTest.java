@@ -17,8 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 abstract class TaskManagerTest {
 
     public static TaskManager taskManager = Managers.getDefault();
-    //public static HistoryManager historyManager = Managers.getDefaultHistory();
-    //protected T taskManager;
     protected Task task1; // id 1
     protected Task task2; // = new Task(); // id 2
     protected Task task3; // id 3
@@ -177,15 +175,15 @@ abstract class TaskManagerTest {
     @Test
     public void timeCrossExceptionShouldBeThrownIfTasksTimeCross() {
         task2 = new Task();
-        task2.setTaskName("task2_name");
-        task2.setDescription("task2_description");
+        task2.setTaskName("task13_name");
+        task2.setDescription("task13_description");
         task2.setStatus(TaskStatus.IN_PROGRESS);
         task2.setDuration(Duration.ofMinutes(20));
         task2.setStartTime(LocalDateTime.of(2022, 12, 1, 10, 25, 0));
 
         assertThrows(TimeCrossException.class, () -> {
             task2 = taskManager.createNewTask(task2);
-        }, "Задача не добавлена: пересечение задач по времени.");
+        }, "Задача 13 не добавлена: пересечение задач по времени.");
     }
 }
 

@@ -37,44 +37,38 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask createNewSubtask(Subtask subtask) {
-        try {
-            subtask.setId(id + 1);
-            int epicId = subtask.getEpicId();
-            Epic epic = epics.get(epicId);
-            if (subtask.getStartTime() != null) {
-                if (!isTimeCross(subtask)) {
-                    prioritizedTasks.add(subtask);
-                } else {
-                    throw new TimeCrossException("");
-                }
+        subtask.setId(id + 1);
+        int epicId = subtask.getEpicId();
+        Epic epic = epics.get(epicId);
+        if (subtask.getStartTime() != null) {
+            if (!isTimeCross(subtask)) {
+                prioritizedTasks.add(subtask);
+            } else {
+                throw new TimeCrossException("Подзадача " + subtask.getId() + " не добавлена: " +
+                        "пересечение задач по времени.");
             }
-            id++;
-            subtasks.put(id, subtask);
-            epic.addSubtasksIds(id);
-            setEpicStart(epicId);
-            setEpicStatus(epicId);
-        } catch (TimeCrossException e) {
-            throw new TimeCrossException("Задача не добавлена: пересечение задач по времени.");
         }
+        id++;
+        subtasks.put(id, subtask);
+        epic.addSubtasksIds(id);
+        setEpicStart(epicId);
+        setEpicStatus(epicId);
         return subtasks.get(id);
     }
 
     @Override
     public Task createNewTask(Task task) {
-        try {
-            task.setId(id + 1);
-            if (task.getStartTime() != null) {
-                if (!isTimeCross(task)) {
-                    prioritizedTasks.add(task);
-                } else {
-                    throw new TimeCrossException("");
-                }
+        task.setId(id + 1);
+        if (task.getStartTime() != null) {
+            if (!isTimeCross(task)) {
+                prioritizedTasks.add(task);
+            } else {
+                throw new TimeCrossException("Задача " + task.getId() + " не добавлена: " +
+                        "пересечение задач по времени.");
             }
-            id++;
-            tasks.put(id, task);
-        } catch (TimeCrossException e) {
-            throw new TimeCrossException("Задача не добавлена: пересечение задач по времени.");
         }
+        id++;
+        tasks.put(id, task);
         return tasks.get(id);
     }
 
@@ -84,7 +78,6 @@ public class InMemoryTaskManager implements TaskManager {
         if (tasks.get(id).getStartTime() != null) {
             prioritizedTasks.remove(tasks.get(id));
         }
-        prioritizedTasks.remove(tasks.get(id));
         tasks.remove(id);
         historyManager.remove(id);
     }
@@ -196,44 +189,38 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
-        try {
-            if (task.getStartTime() != null) {
-                if (prioritizedTasks.contains(task)) {
-                    prioritizedTasks.remove(tasks.get(task.getId()));
-                }
-                if (!isTimeCross(task)) {
-                    prioritizedTasks.add(task);
-                } else {
-                    throw new TimeCrossException("");
-                }
+        if (task.getStartTime() != null) {
+            if (prioritizedTasks.contains(task)) {
+                prioritizedTasks.remove(tasks.get(task.getId()));
             }
-            tasks.put(task.getId(), task);
-        } catch (TimeCrossException e) {
-            throw new TimeCrossException("Задача не обновлена: пересечение задач по времени.");
+            if (!isTimeCross(task)) {
+                prioritizedTasks.add(task);
+            } else {
+                throw new TimeCrossException("Задача " + task.getId() + " не обновлена: " +
+                        "пересечение задач по времени.");
+            }
         }
+        tasks.put(task.getId(), task);
     }
 
     @Override
     public void updateSubTask(Subtask subtask) {
-        try {
-            if (subtask.getStartTime() != null) {
-                if (prioritizedTasks.contains(subtask)) {
-                    prioritizedTasks.remove(subtasks.get(subtask.getId()));
-                }
-                if (!isTimeCross(subtask)) {
-                    prioritizedTasks.add(subtask);
-                } else {
-                    throw new TimeCrossException("");
-                }
+        if (subtask.getStartTime() != null) {
+            if (prioritizedTasks.contains(subtask)) {
+                prioritizedTasks.remove(subtasks.get(subtask.getId()));
             }
-            id++;
-            tasks.put(id, subtask);
-            int epicId = subtask.getEpicId();
-            setEpicStatus(epicId);
-            setEpicStart(epicId);
-        } catch (TimeCrossException e) {
-            throw new TimeCrossException("Задача не добавлена: пересечение задач по времени.");
+            if (!isTimeCross(subtask)) {
+                prioritizedTasks.add(subtask);
+            } else {
+                throw new TimeCrossException("Подзадача" + subtask.getId() + " не обновлена: " +
+                        "пересечение задач по времени.");
+            }
         }
+        id++;
+        tasks.put(id, subtask);
+        int epicId = subtask.getEpicId();
+        setEpicStatus(epicId);
+        setEpicStart(epicId);
     }
 
     @Override
@@ -293,6 +280,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    //метод для установки начала времени эпиков
     private void setEpicStart(int id) {
         Epic epic = epics.get(id);
         subtasksIds = epic.getSubtasksIds();
@@ -315,6 +303,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    //метод для нахождения пересечения задач по времени
     private boolean isTimeCross(Task task) {
         return prioritizedTasks.stream()
                 .anyMatch(pt -> (task.getStartTime() != null) && (task.getDuration() != null)
