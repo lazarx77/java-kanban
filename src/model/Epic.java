@@ -2,13 +2,20 @@ package model;
 
 import service.TaskType;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
     private Integer id;
-
+    private LocalDateTime endTime;
     private final List<Integer> subtasksIds = new ArrayList<>();
+
+    @Override
+    public LocalDateTime getEndTime() {
+        endTime = super.getEndTime();
+        return endTime;
+    }
 
     public List<Integer> addSubtasksIds(int id) {
         subtasksIds.add(id);
@@ -28,6 +35,15 @@ public class Epic extends Task {
         subtasksIds.clear();
     }
 
+
+    public void setEndTime(LocalDateTime starTime) {
+        endTime = starTime.plusMinutes(duration);
+    }
+
+    public LocalDateTime getEpicEndTime() {
+        return endTime;
+    }
+
     @Override
     public TaskType getType() {
         return TaskType.EPIC;
@@ -43,6 +59,16 @@ public class Epic extends Task {
             result = result + ", description.length=" + getDescription().length();
         } else {
             result = result + ", extraInfo=null";
+        }
+        if (startTime != null) {
+            result = result + ", startTime= " + startTime.format(formatter);
+        } else {
+            result = result + ", startTime= null";
+        }
+        if (duration != 0) {
+            result = result + ", duration= " + duration;
+        } else {
+            result = result + ", duration= null";
         }
         result = result + ", status=" + getStatus() + " " + "subtasksIds= " + subtasksIds;
         return result + '}';

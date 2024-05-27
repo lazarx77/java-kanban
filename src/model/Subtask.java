@@ -30,6 +30,16 @@ public class Subtask extends Task {
         } else {
             result = result + ", extraInfo=null";
         }
+        if (startTime != null) {
+            result = result + ", startTime= " + startTime.format(formatter);
+        } else {
+            result = result + ", startTime= null";
+        }
+        if (duration != 0) {
+            result = result + ", duration= " + duration;
+        } else {
+            result = result + ", duration= null";
+        }
 
         result = result + ", status=" + getStatus() + " " + "epicId = " + epicId;
         return result + '}';

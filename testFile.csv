@@ -1,6 +1,6 @@
-id,type,name,status,description,epic
-2,TASK,task9_name,IN_PROGRESS,task9_description
-3,EPIC,epic1_name,IN_PROGRESS,epic1_description
-4,SUBTASK,subtask11_name,NEW,subtask11_description,3
-5,SUBTASK,subtask2_name,DONE,subtask2_description,3
-6,SUBTASK,subtask3_name,DONE,subtask3_description,3
+id,type,name,status,description,epic,date-time,duration
+2,TASK,task2_name,IN_PROGRESS,task2_description,01.10.2023 - 10:11,40
+3,EPIC,epic1_name,IN_PROGRESS,epic1_description,01.12.2023 - 10:11,30
+4,SUBTASK,subtask11_name,NEW,subtask11_description,3,01.12.2023 - 10:11,10
+5,SUBTASK,subtask2_name,DONE,subtask2_description,3,01.12.2023 - 10:21,10
+6,SUBTASK,subtask3_name,DONE,subtask3_description,3,01.12.2023 - 10:31,10
