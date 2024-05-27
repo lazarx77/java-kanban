@@ -125,9 +125,9 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
         try (Writer fw = new FileWriter(testFile)) {
             fw.write("id,type,name,status,description,epic,date-time,duration\n" +
                     "1,TASK,task1_name,NEW,task1_description,01.12.2022 - 10:10,30\n" +
-                    "2,EPIC,epic1,IN_PROGRESS,epic1_description,01.12.2022 - 10:10,35\n" +
-                    "3,SUBTASK,subtask1,NEW,subtask1_description,2,01.12.2022 - 10:10,15\n" +
-                    "4,SUBTASK,subtask2,DONE,subtask2_description,2,01.12.2022 - 10:25,20\n");
+                    "2,EPIC,epic1,IN_PROGRESS,epic1_description,02.12.2022 - 10:10,35\n" +
+                    "3,SUBTASK,subtask1,NEW,subtask1_description,2,03.12.2022 - 10:10,15\n" +
+                    "4,SUBTASK,subtask2,DONE,subtask2_description,2,04.12.2022 - 10:25,20\n");
         } catch (IOException e) {
             System.out.println("Ошибка записи в файл");
         }
@@ -152,9 +152,9 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
             throw new ManagerSaveException("Ошибка чтения файла");
         }
         assertEquals(taskStings.toString(), "[1,TASK,task1_name,NEW,task1_description,01.12.2022 - 10:10,30, " +
-                "2,EPIC,epic1,IN_PROGRESS,epic1_description,01.12.2022 - 10:10,35, 3,SUBTASK,subtask1," +
-                "NEW,subtask1_description,2,01.12.2022 - 10:10,15, 4,SUBTASK,subtask2,DONE,subtask2_description," +
-                "2,01.12.2022 - 10:25,20]");
+                "2,EPIC,epic1,IN_PROGRESS,epic1_description,02.12.2022 - 10:10,35, 3,SUBTASK,subtask1,NEW," +
+                "subtask1_description,2,03.12.2022 - 10:10,15, 4,SUBTASK,subtask2,DONE,subtask2_description,2," +
+                "04.12.2022 - 10:25,20]");
         testFile.delete();
         saveFile.delete();
     }

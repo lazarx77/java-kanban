@@ -18,8 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class HistoryManagerTest {
     public static TaskManager taskManager = Managers.getDefault();
     public static HistoryManager historyManager = Managers.getDefaultHistory();
-    // public static TaskManager taskManager = Managers.getDefault();
-    //public static HistoryManager historyManager = Managers.getDefaultHistory();
     private Task task1 = new Task(); // id 1
     private Task task2 = new Task(); // id 2
     private Task task3 = new Task(); // id 3
