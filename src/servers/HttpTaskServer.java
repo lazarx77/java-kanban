@@ -58,6 +58,7 @@ public class HttpTaskServer extends InMemoryTaskManager {
 
             switch (exchange.getRequestMethod()) {
                 case "GET" :
+                case "POST" :
 
             }
         }
