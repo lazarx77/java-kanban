@@ -6,6 +6,7 @@ import com.sun.net.httpserver.HttpHandler;
 //import exceptions.HttpTaskNotCreated;
 import exceptions.HttpTaskNotFoundException;
 import model.Task;
+import model.TaskStatus;
 import service.Managers;
 import service.TaskManager;
 import exceptions.TimeCrossException;
@@ -27,7 +28,7 @@ public class TasksHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exc) throws IOException {
-//        System.out.println("Началась обработка /tasks запроса от клиента.");
+        System.out.println("Началась обработка /tasks запроса от клиента.");
 
          //Обрабатываем запрос /tasks"
         String response = "";
@@ -36,15 +37,22 @@ public class TasksHandler implements HttpHandler {
         URI requestURI = exc.getRequestURI();
         String path = requestURI.getPath();
         String[] splitStrings = path.split("/");
-        String idString = splitStrings[2];
-        int idInt = Integer.parseInt(idString);
-//        GsonBuilder gsonBuilder = new GsonBuilder();
-//        gsonBuilder.setPrettyPrinting();
-//        Gson gson = gsonBuilder.create();
-        //gson.fromJson(exc.getRequestBody())
+
+        String idString = "";
+        int idInt = 0;
+        if (splitStrings.length == 3) {
+            idString = splitStrings[1];
+            idInt = Integer.parseInt(idString);
+        }
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setPrettyPrinting();
+        Gson gson = gsonBuilder.create();
+//        gson.fromJson(exc.getRequestBody())
 
         switch(method) {
             case "POST":
+                System.out.println("POST");
                 InputStream inputStream = exc.getRequestBody();
                 String body = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
                 JsonElement jsonElement = JsonParser.parseString(body);
@@ -55,79 +63,85 @@ public class TasksHandler implements HttpHandler {
                     task.setDescription(jsonObject.get("description").getAsString());
                     task.setDuration(Duration.ofMinutes(jsonObject.get("duration").getAsInt()));
                     task.setStartTime(LocalDateTime.parse(jsonObject.get("dateTime").getAsString(), Task.formatter));
+                    task.setStatus(TaskStatus.valueOf(jsonObject.get("status").getAsString()));
                     try {
                         task = taskManager.createNewTask(task);
-                        response = "Новая задача Task с id =" + task.getId() + " создана";
-
+                        response = "Новая задача Task с id = " + task.getId() + " создана";
                         exc.sendResponseHeaders(201, 0);
                         try (OutputStream os = exc.getResponseBody()) {
-                            //String response = "Привет " + name + "! Рады видеть на нашем сервере.";
                             os.write(response.getBytes());
+                            return;
                         }
-
-
-
-
-//                        byte[] resp = response.getBytes(StandardCharsets.UTF_8);
-//                        exc.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
-//                        exc.sendResponseHeaders(201, resp.length);
-//                        exc.getResponseBody().write(resp);
-//                        exc.close();
-                        return;
-                    } catch (TimeCrossException e) {
-                        baseHandler.sendHasInteractions(exc);
-                    }
-                } else {
-                    Task task = new Task();
-                    task.setId(idInt);
-                    task.setTaskName(jsonObject.get("taskName").getAsString());
-                    task.setDescription(jsonObject.get("description").getAsString());
-                    task.setDuration(Duration.ofMinutes(jsonObject.get("duration").getAsInt()));
-                    task.setStartTime(LocalDateTime.parse(jsonObject.get("dateTime").getAsString(), Task.formatter));
-                    try {
-                        taskManager.updateTask(task);
-                        response = "Задача Task с id=" + idInt + " обновлена";
-                        baseHandler.sendText(exc, response);
-                        return;
                     } catch (TimeCrossException e) {
                         baseHandler.sendHasInteractions(exc);
                     }
                 }
+//
+//
+//
+//
+////                        byte[] resp = response.getBytes(StandardCharsets.UTF_8);
+////                        exc.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+////                        exc.sendResponseHeaders(201, resp.length);
+////                        exc.getResponseBody().write(resp);
+////                        exc.close();
+//                        break;
+//                    } catch (TimeCrossException e) {
+//                        baseHandler.sendHasInteractions(exc);
+//                    }
+//                } else {
+//                    Task task = new Task();
+//                    task.setId(idInt);
+//                    task.setTaskName(jsonObject.get("taskName").getAsString());
+//                    task.setDescription(jsonObject.get("description").getAsString());
+//                    task.setDuration(Duration.ofMinutes(jsonObject.get("duration").getAsInt()));
+//                    task.setStartTime(LocalDateTime.parse(jsonObject.get("dateTime").getAsString(), Task.formatter));
+//                    try {
+//                        taskManager.updateTask(task);
+//                        response = "Задача Task с id=" + idInt + " обновлена";
+//                        baseHandler.sendText(exc, response);
+//                        return;
+//                    } catch (TimeCrossException e) {
+//                        baseHandler.sendHasInteractions(exc);
+//                    }
+//                }
                 break;
             case "GET":
-                if (idString.isEmpty()) {
-//                    response = taskManager.getAllTasks().toString(); //запрос всех задач
-                    response = taskManager.getAllTasks().stream()
-                            .map(Task::toString)
-                            .collect(Collectors.joining("\n"));
-                } else {
-                    try {
-                        response = taskManager.getTaskById(idInt).toString(); //запрос задачи по id
-                    } catch (HttpTaskNotFoundException e) {
-                        baseHandler.sendNotFound(exc, idInt);
-                    }
-                }
+                System.out.println("GET");
+//                if (idString.isEmpty()) {
+////                    response = taskManager.getAllTasks().toString(); //запрос всех задач
+//                    response = taskManager.getAllTasks().stream()
+//                            .map(Task::toString)
+//                            .collect(Collectors.joining("\n"));
+//                } else {
+//                    try {
+//                        response = taskManager.getTaskById(idInt).toString(); //запрос задачи по id
+//                    } catch (HttpTaskNotFoundException e) {
+//                        baseHandler.sendNotFound(exc, idInt);
+//                    }
+//                }
                 break;
             case "DELETE":
-                if (idString.isEmpty()) {
-                    response = "Ошибка в запросе - укажите id задачи";
-                    byte[] resp = response.getBytes(StandardCharsets.UTF_8);
-                    exc.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
-                    exc.sendResponseHeaders(404, resp.length);
-                    exc.getResponseBody().write(resp);
-                    exc.close();
+                System.out.println("DELETE");
+//                if (idString.isEmpty()) {
+//                    response = "Ошибка в запросе - укажите id задачи";
+//                    byte[] resp = response.getBytes(StandardCharsets.UTF_8);
+//                    exc.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+//                    exc.sendResponseHeaders(404, resp.length);
+//                    exc.getResponseBody().write(resp);
+//                    exc.close();
 //
 //                    baseHandler.sendNotFound(exc, idInt);
-                    return;
-                } else {
-                    try {
-                        taskManager.deleteTaskById(idInt);
-                        response = "Задача Task с id= " + idInt + " удалена";
-                    } catch (HttpTaskNotFoundException e) {
-                        baseHandler.sendNotFound(exc, idInt);
-                    }
-                }
-                break;
+//                    return;
+//                } else {
+//                    try {
+//                        taskManager.deleteTaskById(idInt);
+//                        response = "Задача Task с id= " + idInt + " удалена";
+//                    } catch (HttpTaskNotFoundException e) {
+//                        baseHandler.sendNotFound(exc, idInt);
+//                    }
+//                }
+//                break;
             default:
                 response = "Вы использовали какой-то другой метод!";
         }

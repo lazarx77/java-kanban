@@ -24,7 +24,6 @@ public class HttpTaskServer  { //extends InMemoryTaskManager {
 
     private HttpServer server;
     private Gson gson;
-
     private TaskManager taskManager;
 
     public HttpTaskServer() throws IOException {
