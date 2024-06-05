@@ -1,4 +1,4 @@
-package service;
+package exceptions;
 
 public class TimeCrossException extends RuntimeException {
 

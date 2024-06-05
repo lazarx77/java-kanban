@@ -13,8 +13,8 @@ public class Task {
     private String taskName;
     private String description;
     private TaskStatus status;
-    long duration; //может быть равным null
-    LocalDateTime startTime; //может быть равным null
+    protected long duration; //может быть равным null
+    protected LocalDateTime startTime; //может быть равным null
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
 
     @Override

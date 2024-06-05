@@ -1,5 +1,7 @@
 package service;
 
+import exceptions.HttpTaskNotFoundException;
+import exceptions.TimeCrossException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -75,38 +77,50 @@ public class InMemoryTaskManager implements TaskManager {
     // методы для удаления задач по id
     @Override
     public void deleteTaskById(int id) {
-        if (tasks.get(id).getStartTime() != null) {
-            prioritizedTasks.remove(tasks.get(id));
+        if (tasks.get(id) != null) {
+            if (tasks.get(id).getStartTime() != null) {
+                prioritizedTasks.remove(tasks.get(id));
+            }
+            tasks.remove(id);
+            historyManager.remove(id);
+        } else {
+            throw new HttpTaskNotFoundException("Задача Task c id=" + id + " отсутствеет в tasks");
         }
-        tasks.remove(id);
-        historyManager.remove(id);
     }
 
     @Override
     public void deleteEpic(int id) {
-        Epic epic = epics.get(id);
-        List<Integer> subtasksIds = epic.getSubtasksIds();
-        for (int subtaskId : subtasksIds) {
-            historyManager.remove(subtaskId);
-            subtasks.remove(subtaskId);
+        if (epics.get(id) != null) {
+            Epic epic = epics.get(id);
+            List<Integer> subtasksIds = epic.getSubtasksIds();
+            for (int subtaskId : subtasksIds) {
+                historyManager.remove(subtaskId);
+                subtasks.remove(subtaskId);
+            }
+            epic.clearSubtaskIds();
+            historyManager.remove(id);
+            epics.remove(id);
+        } else {
+            throw new HttpTaskNotFoundException("Задача Epic с id=" + id + " отсутствует в epics");
         }
-        epic.clearSubtaskIds();
-        historyManager.remove(id);
-        epics.remove(id);
     }
 
     @Override
     public void deleteSubtask(int id) {
-        Subtask subtask = subtasks.get(id);
-        int epicId = subtask.getEpicId();
-        Epic epic = epics.get(epicId);
-        epic.removeSubtasksIds(id);
-        historyManager.remove(id);
-        subtasks.remove(id);
-        setEpicStatus(epicId);
-        setEpicStart(epicId);
-        if (subtask.getStartTime() != null) {
-            prioritizedTasks.remove(subtask);
+        if (subtasks.get(id) != null) {
+            Subtask subtask = subtasks.get(id);
+            int epicId = subtask.getEpicId();
+            Epic epic = epics.get(epicId);
+            epic.removeSubtasksIds(id);
+            historyManager.remove(id);
+            subtasks.remove(id);
+            setEpicStatus(epicId);
+            setEpicStart(epicId);
+            if (subtask.getStartTime() != null) {
+                prioritizedTasks.remove(subtask);
+            }
+        } else {
+            throw new HttpTaskNotFoundException("Задача Subtask с id=" + id + " отсутствует в subtasks");
         }
     }
 
@@ -161,23 +175,35 @@ public class InMemoryTaskManager implements TaskManager {
     //остальные методы
     @Override
     public Task getTaskById(int id) {
-        historyManager.add(tasks.get(id));
-        return tasks.get(id);
+        if (tasks.get(id) != null) {
+            historyManager.add(tasks.get(id));
+            return tasks.get(id);
+        } else {
+            throw new HttpTaskNotFoundException("Задача Task с указанным id =" + id + " в tasks не найдена");
+        }
     }
 
 
     @Override
     public Epic getEpicById(int id) {
-        setEpicStatus(id); // защита от внешнего setStatus для epic - пересчет статуса перед записью в историю
-        setEpicStart(id);
-        historyManager.add(epics.get(id));
-        return epics.get(id);
+        if (epics.get(id) != null) {
+            setEpicStatus(id); // защита от внешнего setStatus для epic - пересчет статуса перед записью в историю
+            setEpicStart(id);
+            historyManager.add(epics.get(id));
+            return epics.get(id);
+        } else {
+            throw new HttpTaskNotFoundException("Задача Epic с указанным id = " + id + "в epics не найдена");
+        }
     }
 
     @Override
     public Subtask getSubtaskById(int id) {
-        historyManager.add(subtasks.get(id));
-        return subtasks.get(id);
+        if (subtasks.get(id) != null) {
+            historyManager.add(subtasks.get(id));
+            return subtasks.get(id);
+        } else {
+            throw new HttpTaskNotFoundException("Задача Subtask с указанным id = " + id + "в subtasks не найдена");
+        }
     }
 
     @Override

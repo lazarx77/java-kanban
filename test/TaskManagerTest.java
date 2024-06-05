@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.Managers;
 import service.TaskManager;
-import service.TimeCrossException;
+import exceptions.TimeCrossException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
