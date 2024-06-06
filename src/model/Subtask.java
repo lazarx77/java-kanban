@@ -23,10 +23,10 @@ public class Subtask extends Task {
     public String toString() {
 
         String result = "Subtask{" +
-                "id='" + getId() + " " +
-                ", taskName= " + getTaskName(getId()) + " ";
+                "id='" + id + " " +
+                ", taskName= " + taskName + " ";
         if (getDescription() != null) {
-            result = result + ", description.length=" + getDescription().length();
+            result = result + ", description.length=" + description.length();
         } else {
             result = result + ", extraInfo=null";
         }
@@ -41,7 +41,7 @@ public class Subtask extends Task {
             result = result + ", duration= null";
         }
 
-        result = result + ", status=" + getStatus() + " " + "epicId = " + epicId;
+        result = result + ", status=" + status + " " + "epicId = " + epicId;
         return result + '}';
     }
 

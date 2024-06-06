@@ -53,10 +53,10 @@ public class Epic extends Task {
     public String toString() {
 
         String result = "Epic{" +
-                "id='" + getId() + " " +
-                ", taskName= " + getTaskName(getId()) + " ";
-        if (getDescription() != null) {
-            result = result + ", description.length=" + getDescription().length();
+                "id='" + id + " " +
+                ", taskName= " + taskName + " ";
+        if (description != null) {
+            result = result + ", description.length=" + description.length();
         } else {
             result = result + ", extraInfo=null";
         }
@@ -70,7 +70,7 @@ public class Epic extends Task {
         } else {
             result = result + ", duration= null";
         }
-        result = result + ", status=" + getStatus() + " " + "subtasksIds= " + subtasksIds;
+        result = result + ", status=" + status + " " + "subtasksIds= " + subtasksIds;
         return result + '}';
     }
 }

@@ -50,6 +50,7 @@ public class EpicsHandler extends BaseHttpHandler {
                 //System.out.println(body);
 //                try {
                     Epic epic = gson.fromJson(body, Epic.class);
+                String str = epic.toString();
 //                } catch (Exception exception) {
 //                    System.out.println(exception.getMessage());
 //                }
