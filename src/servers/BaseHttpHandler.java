@@ -60,8 +60,8 @@ public class BaseHttpHandler implements HttpHandler {
         }
         inputStream = exc.getRequestBody();
         body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
-        jsonElement = JsonParser.parseString(body);
-        jsonObject = jsonElement.getAsJsonObject();
+//        jsonElement = JsonParser.parseString(body);
+//        jsonObject = jsonElement.getAsJsonObject();
     }
 
     protected void sendText(HttpExchange exc, String text) throws IOException {

@@ -3,6 +3,7 @@ package servers;
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import exceptions.InMemoryTaskNotFoundException;
+import model.Epic;
 import model.Task;
 import model.TaskStatus;
 import service.TaskManager;
@@ -28,12 +29,13 @@ public class TasksHandler extends BaseHttpHandler {
         switch (method) {
             case "POST":
                 System.out.println("POST tasks");
-                Task task = new Task();
-                task.setTaskName(jsonObject.get("name").getAsString());
-                task.setDescription(jsonObject.get("description").getAsString());
-                task.setDuration(Duration.ofMinutes(jsonObject.get("duration").getAsInt()));
-                task.setStartTime(LocalDateTime.parse(jsonObject.get("dateTime").getAsString(), Task.formatter));
-                task.setStatus(TaskStatus.valueOf(jsonObject.get("status").getAsString()));
+                Task task = gson.fromJson(body, Task.class);
+//                Task task = new Task();
+//                task.setTaskName(jsonObject.get("name").getAsString());
+//                task.setDescription(jsonObject.get("description").getAsString());
+//                task.setDuration(Duration.ofMinutes(jsonObject.get("duration").getAsInt()));
+//                task.setStartTime(LocalDateTime.parse(jsonObject.get("dateTime").getAsString(), Task.formatter));
+//                task.setStatus(TaskStatus.valueOf(jsonObject.get("status").getAsString()));
                 if (idString.isEmpty()) {
                     try {
                         task = taskManager.createNewTask(task);
@@ -41,8 +43,8 @@ public class TasksHandler extends BaseHttpHandler {
                         exc.sendResponseHeaders(201, 0);
                         try (OutputStream os = exc.getResponseBody()) {
                             os.write(response.getBytes(DEFAULT_CHARSET));
-                            return;
                         }
+//                        return;
                     } catch (TimeCrossException e) {
                         sendHasInteractions(exc);
                     }
