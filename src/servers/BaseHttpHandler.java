@@ -27,6 +27,7 @@ public class BaseHttpHandler implements HttpHandler {
     protected String body;
     protected JsonElement jsonElement;
     protected JsonObject jsonObject;
+    protected String subtasksString = "";
 
     protected final Gson gson = new GsonBuilder()
             .serializeNulls()
@@ -50,7 +51,7 @@ public class BaseHttpHandler implements HttpHandler {
         String[] splitStrings = path.split("/"); //делим путь на составляющие
         idString = "";
         idInt = 0;
-        if (splitStrings.length == 3) { // получаем переданный в пути id задачи
+        if (splitStrings.length >= 3) { // получаем переданный в пути id задачи
             idString = splitStrings[2];
             try {
                 idInt = Integer.parseInt(idString);
@@ -58,15 +59,19 @@ public class BaseHttpHandler implements HttpHandler {
                 System.out.println(e.getMessage());
             }
         }
+        if (splitStrings.length == 4 && splitStrings[3].equals("subtasks")) {
+            subtasksString = splitStrings[3];
+        }
+
         inputStream = exc.getRequestBody();
         body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
-//        jsonElement = JsonParser.parseString(body);
-//        jsonObject = jsonElement.getAsJsonObject();
     }
 
-    protected void sendText(HttpExchange exc, String text) throws IOException {
-        exc.sendResponseHeaders(200, 0);
-        exc.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+    protected void sendText(HttpExchange exc, String text, int code) throws IOException {
+        exc.sendResponseHeaders(code, 0);
+        if (code == 200) {
+            exc.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+        }
         try (OutputStream os = exc.getResponseBody()) {
             os.write(text.getBytes(DEFAULT_CHARSET));
         }
@@ -74,7 +79,6 @@ public class BaseHttpHandler implements HttpHandler {
 
     protected void sendNotFound(HttpExchange exc, int id) throws IOException {
         byte[] resp = ("Не найдена задача указанным id=" + id).getBytes(DEFAULT_CHARSET);
-        exc.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         exc.sendResponseHeaders(404, resp.length);
         exc.getResponseBody().write(resp);
         exc.close();
@@ -83,7 +87,6 @@ public class BaseHttpHandler implements HttpHandler {
     protected void sendHasInteractions(HttpExchange exc) throws IOException {
         byte[] resp = ("Задача пересекается с существующими. " +
                 "Обновление или создание данной задачи невозможно").getBytes(DEFAULT_CHARSET);
-        exc.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         exc.sendResponseHeaders(406, resp.length);
         exc.getResponseBody().write(resp);
         exc.close();

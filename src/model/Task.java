@@ -4,6 +4,7 @@ import service.TaskType;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -13,8 +14,8 @@ public class Task {
     protected String taskName;
     protected String description;
     protected TaskStatus status;
-    protected long duration; //может быть равным null
-    protected LocalDateTime startTime; //может быть равным null
+    protected long duration;
+    protected LocalDateTime startTime;
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
 
     @Override
@@ -48,15 +49,12 @@ public class Task {
     }
 
     public void setDuration(Duration duration) {
-        if (duration != null) {
-            this.duration = duration.toMinutes();
-        }
+        this.duration = duration.toMinutes();
+
     }
 
     public void setStartTime(LocalDateTime startTime) {
-        if (startTime != null) {
-            this.startTime = startTime;
-        }
+        this.startTime = startTime;
     }
 
     public LocalDateTime getStartTime() {

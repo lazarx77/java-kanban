@@ -35,6 +35,7 @@ public class InMemoryTaskManager implements TaskManager {
         id++;
         epic.setId(id);
         epic.setStatus(TaskStatus.NEW);
+        epic.getEndTime();
         epics.put(id, epic);
         return epics.get(id);
     }
@@ -263,14 +264,19 @@ public class InMemoryTaskManager implements TaskManager {
     public void updateEpic(Epic epic) {
         if (epics.containsKey(epic.getId())) {
             int id = epic.getId();
+            List<Integer> subtasksIds;
             if (epics.containsKey(id)) {
                 Epic middleEpic = epics.get(id);
-                List<Integer> subtasksIds = middleEpic.getSubtasksIds();
+                subtasksIds = middleEpic.getSubtasksIds();
                 for (int subtaskId : subtasksIds) {
                     epic.addSubtasksIds(subtaskId);
                 }
-                setEpicStatus(id);
-                setEpicStart(id);
+                if (!subtasksIds.isEmpty()) {
+                    setEpicStatus(id);
+                    setEpicStart(id);
+                } else {
+                    epic.getEndTime();
+                }
                 epics.put(id, epic);
             }
         } else {

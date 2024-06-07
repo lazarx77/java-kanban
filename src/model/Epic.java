@@ -13,7 +13,11 @@ public class Epic extends Task {
 
     @Override
     public LocalDateTime getEndTime() {
-        endTime = super.getEndTime();
+        if (startTime != null) {
+            endTime = startTime.plus(getDuration());
+        } else {
+            endTime = null;
+        }
         return endTime;
     }
 
@@ -71,6 +75,11 @@ public class Epic extends Task {
             result = result + ", duration= null";
         }
         result = result + ", status=" + status + " " + "subtasksIds= " + subtasksIds;
+        if (endTime != null) {
+            result = result + ", endTime= " + endTime.format(formatter);
+        } else {
+            result = result + ", endTime= null";
+        }
         return result + '}';
     }
 }
