@@ -2,54 +2,30 @@ package servers;
 
 import com.sun.net.httpserver.HttpExchange;
 import exceptions.InMemoryTaskNotFoundException;
-
+import exceptions.TimeCrossException;
 import model.Task;
 import service.HistoryManager;
+import service.InMemoryTaskManager;
 import service.TaskManager;
-import exceptions.TimeCrossException;
 import service.TaskType;
 
 import java.io.IOException;
 
-public class TasksHandler extends BaseHttpHandler {
-
-    protected TasksHandler(TaskManager taskManager) {
+public class HistoryHandler extends BaseHttpHandler {
+    protected HistoryHandler(TaskManager taskManager) {
         super(taskManager);
     }
 
     @Override
     public void handle(HttpExchange exc) throws IOException {
         super.handle(exc);
+        HistoryManager historyManager = taskManager.getHistoryManager();
 
         switch (method) {
-            case "POST":
-                System.out.println("POST tasks");
-                Task task = gson.fromJson(body, Task.class);
-                if (idString.isEmpty()) {
-                    try {
-                        task = taskManager.createNewTask(task);
-                        response = "Новая задача " + task.getType() + " с id = " + task.getId() + " создана";
-                    } catch (TimeCrossException e) {
-                        sendHasInteractions(exc);
-                    }
-                    //sendText(exc, response, 201);
-                } else {
-                    task.setId(idInt);
-                    try {
-                        taskManager.updateTask(task);
-                        response = "Задача " + task.getType() + " с id = " + idInt + " обновлена";
-                    } catch (TimeCrossException e) {
-                        sendHasInteractions(exc);
-                    } catch (InMemoryTaskNotFoundException e) {
-                        sendNotFound(exc, idInt);
-                    }
-                }
-                sendText(exc, response, 201);
-                break;
             case "GET":
-                System.out.println("GET tasks");
+                System.out.println("GET history");
                 if (idString.isEmpty()) {
-                    response = gson.toJson(taskManager.getAllTasks());
+                    response = gson.toJson(historyManager.getHistory());
                 } else {
                     try {
                         response = gson.toJson(taskManager.getTaskById(idInt));
@@ -80,5 +56,3 @@ public class TasksHandler extends BaseHttpHandler {
         }
     }
 }
-
-

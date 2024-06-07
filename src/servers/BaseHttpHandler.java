@@ -4,6 +4,7 @@ import adapters.LocalDateTimeAdapter;
 import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import service.HistoryManager;
 import service.TaskManager;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class BaseHttpHandler implements HttpHandler {
 
 
     protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    protected HistoryManager historyManager;
     protected TaskManager taskManager;
     protected String response; //поле для хранения ответа
     protected String method; //поле для хранения вызываемого метода Http

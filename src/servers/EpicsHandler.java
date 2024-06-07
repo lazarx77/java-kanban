@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import exceptions.InMemoryTaskNotFoundException;
 import model.Epic;
 
+import service.HistoryManager;
 import service.TaskManager;
 import service.TaskType;
 
@@ -23,22 +24,19 @@ public class EpicsHandler extends BaseHttpHandler {
         switch (method) {
             case "POST":
                 System.out.println("POST epics");
-
                 Epic epic = gson.fromJson(body, Epic.class);
-
-                if (idString.isEmpty()) {
+                if (idString.isEmpty()) { //добавление нового Epic
                     epic = taskManager.createNewEpic(epic);
                     response = "Новая задача " + epic.getType() + " с id = " + epic.getId() + " создана";
                 } else {
                     epic.setId(idInt);
                     try {
-                        taskManager.updateEpic(epic);
+                        taskManager.updateEpic(epic); // обноеление Epic
                         response = "Задача " + epic.getType() + " с id = " + idInt + " обновлена";
                     } catch (InMemoryTaskNotFoundException e) {
                         sendNotFound(exc, idInt);
                     }
                 }
-//                if (splitStrings == 3)
                 sendText(exc, response, 201);
                 break;
             case "GET":
@@ -54,7 +52,7 @@ public class EpicsHandler extends BaseHttpHandler {
                 }
                 if (!subtasksString.isEmpty()){
                     try {
-                        response = taskManager.getEpicById(idInt).getSubtasksIds().toString();
+                        response = gson.toJson(taskManager.getEpicSubtasks(idInt));
                     } catch (InMemoryTaskNotFoundException e) {
                         sendNotFound(exc, idInt);
                     }

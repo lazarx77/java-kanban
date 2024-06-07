@@ -20,13 +20,19 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Subtask> subtasks;
     protected Map<Integer, Epic> epics;
     protected List<Integer> subtasksIds = new ArrayList<>();
-    protected HistoryManager historyManager = Managers.getDefaultHistory();
+    protected HistoryManager historyManager;// = Managers.getDefaultHistory();
     protected Set<Task> prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
         this.subtasks = new HashMap<>();
         this.epics = new HashMap<>();
+        this.historyManager = Managers.getDefaultHistory();
+    }
+
+    @Override
+    public HistoryManager getHistoryManager() {
+        return historyManager;
     }
 
     // методы для создания задач
@@ -42,9 +48,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Subtask createNewSubtask(Subtask subtask) {
-        subtask.setId(id + 1);
         int epicId = subtask.getEpicId();
-        Epic epic = epics.get(epicId);
+        subtask.setId(id + 1);
+        Epic epic; epics.get(epicId);
+        if (epics.containsKey(epicId)) {
+            epic = epics.get(epicId);
+        } else {
+            throw new InMemoryTaskNotFoundException("Epic с указанным id = " + epicId + " не существует");
+        }
         if (subtask.getStartTime() != null) {
             if (!isTimeCross(subtask)) {
                 prioritizedTasks.add(subtask);
@@ -220,12 +231,14 @@ public class InMemoryTaskManager implements TaskManager {
     public void updateTask(Task task) {
         if (tasks.containsKey(task.getId())) {
             if (task.getStartTime() != null) {
+                Task middle = tasks.get(task.getId());
                 if (prioritizedTasks.contains(task)) {
                     prioritizedTasks.remove(tasks.get(task.getId()));
                 }
                 if (!isTimeCross(task)) {
                     prioritizedTasks.add(task);
                 } else {
+                    prioritizedTasks.add(middle);
                     throw new TimeCrossException("Задача " + task.getId() + " не обновлена: " +
                             "пересечение задач по времени.");
                 }
@@ -240,18 +253,20 @@ public class InMemoryTaskManager implements TaskManager {
     public void updateSubTask(Subtask subtask) {
         if (subtasks.containsKey(subtask.getId())) {
             if (subtask.getStartTime() != null) {
+                Subtask middle = subtasks.get(subtask.getId());
                 if (prioritizedTasks.contains(subtask)) {
                     prioritizedTasks.remove(subtasks.get(subtask.getId()));
                 }
                 if (!isTimeCross(subtask)) {
                     prioritizedTasks.add(subtask);
                 } else {
+                    prioritizedTasks.add(middle);
                     throw new TimeCrossException("Подзадача" + subtask.getId() + " не обновлена: " +
                             "пересечение задач по времени.");
                 }
             }
             id++;
-            tasks.put(id, subtask);
+            subtasks.put(id, subtask);
             int epicId = subtask.getEpicId();
             setEpicStatus(epicId);
             setEpicStart(epicId);

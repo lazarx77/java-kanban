@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import exceptions.InMemoryTaskNotFoundException;
 import exceptions.TimeCrossException;
 import model.Subtask;
+import service.HistoryManager;
 import service.TaskManager;
 import service.TaskType;
 
@@ -22,35 +23,31 @@ public class SubtasksHandler extends BaseHttpHandler {
         switch (method) {
             case "POST":
                 System.out.println("POST subtasks");
-
-                try {
-                    Subtask subtask = gson.fromJson(body, Subtask.class);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                Subtask subtask = gson.fromJson(body, Subtask.class);
+                int epicId = subtask.getEpicId();
+                if (idString.isEmpty()) {
+                    try {
+                        subtask = taskManager.createNewSubtask(subtask);
+                        response = "Новая задача " + subtask.getType() + " с id = " + subtask.getId() + " создана";
+                    } catch (TimeCrossException e) {
+                        sendHasInteractions(exc);
+                    } catch (InMemoryTaskNotFoundException e) {
+                        System.out.println(e.getMessage());
+                        sendNotFound(exc, epicId);
+                    }
+                    sendText(exc, response, 201);
+                } else {
+                    subtask.setId(idInt);
+                    try {
+                        taskManager.updateSubTask(subtask);
+                        response = "Задача " + subtask.getType() + " с id = " + idInt + " обновлена";
+                    } catch (TimeCrossException e) {
+                        sendHasInteractions(exc);
+                    } catch (InMemoryTaskNotFoundException e) {
+                        sendNotFound(exc, idInt);
+                    }
                 }
-
-
-
-//                if (idString.isEmpty()) {
-//                    try {
-//                        subtask = taskManager.createNewSubtask(subtask);
-//                        response = "Новая задача " + subtask.getType() + " с id = " + subtask.getId() + " создана";
-//                    } catch (TimeCrossException e) {
-//                        sendHasInteractions(exc);
-//                    }
-//                    sendText(exc, response, 201);
-//                } else {
-//                    subtask.setId(idInt);
-//                    try {
-//                        taskManager.updateSubTask(subtask);
-//                        response = "Задача " + subtask.getType() + " с id = " + idInt + " обновлена";
-//                    } catch (TimeCrossException e) {
-//                        sendHasInteractions(exc);
-//                    } catch (InMemoryTaskNotFoundException e) {
-//                        sendNotFound(exc, idInt);
-//                    }
-//                    sendText(exc, response, 201);
-//                }
+                sendText(exc, response, 201);
                 break;
             case "GET":
                 System.out.println("GET subtasks");
