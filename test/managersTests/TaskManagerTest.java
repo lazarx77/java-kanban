@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 abstract class TaskManagerTest {
 
-    public static TaskManager taskManager = Managers.getDefault();
+    public static TaskManager taskManager;
     protected Task task1; // id 1
     protected Task task2; // = new Task(); // id 2
     protected Task task3; // id 3

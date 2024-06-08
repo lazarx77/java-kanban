@@ -31,7 +31,6 @@ public class TasksHandler extends BaseHttpHandler {
                     } catch (TimeCrossException e) {
                         sendHasInteractions(exc);
                     }
-                    //sendText(exc, response, 201);
                 } else {
                     task.setId(idInt);
                     try {

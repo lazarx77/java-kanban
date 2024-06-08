@@ -52,6 +52,7 @@ public class BaseHttpHandler implements HttpHandler {
         String[] splitStrings = path.split("/"); //делим путь на составляющие
 
 //        if (URL_NAMES.contains(splitStrings[1])) {
+
             idString = "";
             idInt = 0;
             if (splitStrings.length >= 3) { // получаем переданный в пути id задачи
@@ -68,6 +69,7 @@ public class BaseHttpHandler implements HttpHandler {
 
             inputStream = exc.getRequestBody();
             body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
+
 //        } else {
 //            response = "Недопустимый URL. Доступные URL: " + URL_NAMES;
 //            sendText(exc, response, 422);
