@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface TaskManager {
 
-
     Epic createNewEpic(Epic epic);
 
     Subtask createNewSubtask(Subtask subtask);
@@ -52,6 +51,5 @@ public interface TaskManager {
     List<Subtask> getEpicSubtasks(int id);
 
     List<Task> getPrioritizedTasks();
-    HistoryManager getHistoryManager();
 
 }

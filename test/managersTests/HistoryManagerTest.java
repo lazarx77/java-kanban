@@ -1,3 +1,5 @@
+package managersTests;
+
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -17,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class HistoryManagerTest {
     public static TaskManager taskManager = Managers.getDefault();
+    //public static HistoryManager historyManager = taskManager.getHistoryManager();
     public static HistoryManager historyManager = Managers.getDefaultHistory();
     private Task task1 = new Task(); // id 1
     private Task task2 = new Task(); // id 2
@@ -153,7 +156,7 @@ public class HistoryManagerTest {
     @Test
     public void historyShouldSaveUpdatedEpicsAndSubtasksFormAfterUpdate() {
         String epic2String = "[Epic{id='7 , taskName= epic2_updated_name , description.length=25, startTime= " +
-                "06.12.2022 - 11:25, duration= 10, status=DONE subtasksIds= [8]}]";
+                "06.12.2022 - 11:25, duration= 10, status=DONE subtasksIds= [8], endTime= 06.12.2022 - 11:45}]";
         taskManager.getEpicById(7);
         Epic epic2Updated = new Epic();
         epic2Updated.setTaskName("epic2_updated_name");
@@ -178,10 +181,10 @@ public class HistoryManagerTest {
         subtask5Updated.setEpicId(epic4.getId());
 
         taskManager.updateSubTask(subtask5Updated);
-        String subtask5String = "[Epic{id='7 , taskName= epic2_updated_name , description.length=25, " +
-                "startTime= 06.12.2022 - 11:25, duration= 10, status=DONE subtasksIds= [8]}, Subtask{id='12 , " +
-                "taskName= subtask5_name , description.length=20, startTime= 08.12.2022 - 11:45, duration= 10, " +
-                "status=NEW epicId = 10}]";
+        String subtask5String = "[Epic{id='7 , taskName= epic2_updated_name , description.length=25, startTime= " +
+                "06.12.2022 - 11:25, duration= 10, status=DONE subtasksIds= [8], endTime= 06.12.2022 - 11:45}, " +
+                "Subtask{id='12 , taskName= subtask5_name , description.length=20, startTime= 08.12.2022 - 11:45, " +
+                "duration= 10, status=NEW , epicId = 10}]";
         assertEquals(subtask5String, historyManager.getHistory().toString());
     }
 }

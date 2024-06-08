@@ -3,11 +3,11 @@ package servers;
 import com.sun.net.httpserver.HttpExchange;
 import service.TaskManager;
 
-
 import java.io.IOException;
 
-public class HistoryHandler extends BaseHttpHandler {
-    protected HistoryHandler(TaskManager taskManager) {
+public class PrioritizedHandler extends BaseHttpHandler {
+
+    protected PrioritizedHandler(TaskManager taskManager) {
         super(taskManager);
     }
 
@@ -16,11 +16,11 @@ public class HistoryHandler extends BaseHttpHandler {
         super.handle(exc);
 
         if (method.equals("GET")) {
-            System.out.println("GET history");
-            response = gson.toJson(historyManager.getHistory());
+            System.out.println("GET prioritized");
+            response = gson.toJson(taskManager.getPrioritizedTasks());
             sendText(exc, response, 200);
         } else {
-            response = "Метод не разрешен! Доступный метод для history: GET.";
+            response = "Метод не разрешен! Доступный метод для prioritized: GET.";
             sendText(exc, response, 405);
         }
     }

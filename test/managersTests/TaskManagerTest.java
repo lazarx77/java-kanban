@@ -1,3 +1,5 @@
+package managersTests;
+
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -150,8 +152,9 @@ abstract class TaskManagerTest {
         assertEquals("subtask2_name", subtask2.getTaskName(6));
         assertEquals("epic4_name", epic4.getTaskName(10));
         assertEquals("subtask5_name", subtask5.getTaskName(12));
-        String epic1String = "Epic{id='4 , taskName= epic1_name , description.length=17, startTime= 01.12.2022 - " +
-                "12:25, duration= 20, status=IN_PROGRESS subtasksIds= [5, 6]}";
+        String epic1String = "Epic{id='4 , taskName= epic1_name , description.length=17, startTime=" +
+                " 01.12.2022 - 12:25, duration= 20, status=IN_PROGRESS subtasksIds= [5, 6], " +
+                "endTime= 01.12.2022 - 13:05}";
         assertEquals(epic1String, taskManager.getEpicById(4).toString());
     }
 

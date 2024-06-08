@@ -1,10 +1,9 @@
 package servers;
 
 import com.sun.net.httpserver.HttpExchange;
-import exceptions.InMemoryTaskNotFoundException;
+import exceptions.TaskNotFoundException;
 
 import model.Task;
-import service.HistoryManager;
 import service.TaskManager;
 import exceptions.TimeCrossException;
 import service.TaskType;
@@ -40,7 +39,7 @@ public class TasksHandler extends BaseHttpHandler {
                         response = "Задача " + task.getType() + " с id = " + idInt + " обновлена";
                     } catch (TimeCrossException e) {
                         sendHasInteractions(exc);
-                    } catch (InMemoryTaskNotFoundException e) {
+                    } catch (TaskNotFoundException e) {
                         sendNotFound(exc, idInt);
                     }
                 }
@@ -53,7 +52,7 @@ public class TasksHandler extends BaseHttpHandler {
                 } else {
                     try {
                         response = gson.toJson(taskManager.getTaskById(idInt));
-                    } catch (InMemoryTaskNotFoundException e) {
+                    } catch (TaskNotFoundException e) {
                         sendNotFound(exc, idInt);
                     }
                 }
@@ -68,14 +67,14 @@ public class TasksHandler extends BaseHttpHandler {
                     try {
                         taskManager.deleteTaskById(idInt);
                         response = "Задача " + TaskType.TASK + " с id = " + idInt + " удалена";
-                    } catch (InMemoryTaskNotFoundException e) {
+                    } catch (TaskNotFoundException e) {
                         sendNotFound(exc, idInt);
                     }
                     sendText(exc, response, 200);
                 }
                 break;
             default:
-                response = "Метод не разрешен! Доступные методы: GET, POST, DELETE.";
+                response = "Метод не разрешен! Доступные методы для tasks: GET, POST, DELETE.";
                 sendText(exc, response, 405);
         }
     }

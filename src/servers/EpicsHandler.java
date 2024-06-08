@@ -1,10 +1,9 @@
 package servers;
 
 import com.sun.net.httpserver.HttpExchange;
-import exceptions.InMemoryTaskNotFoundException;
+import exceptions.TaskNotFoundException;
 import model.Epic;
 
-import service.HistoryManager;
 import service.TaskManager;
 import service.TaskType;
 
@@ -33,7 +32,7 @@ public class EpicsHandler extends BaseHttpHandler {
                     try {
                         taskManager.updateEpic(epic); // обноеление Epic
                         response = "Задача " + epic.getType() + " с id = " + idInt + " обновлена";
-                    } catch (InMemoryTaskNotFoundException e) {
+                    } catch (TaskNotFoundException e) {
                         sendNotFound(exc, idInt);
                     }
                 }
@@ -46,14 +45,14 @@ public class EpicsHandler extends BaseHttpHandler {
                 } else {
                     try {
                         response = gson.toJson(taskManager.getEpicById(idInt));
-                    } catch (InMemoryTaskNotFoundException e) {
+                    } catch (TaskNotFoundException e) {
                         sendNotFound(exc, idInt);
                     }
                 }
                 if (!subtasksString.isEmpty()){
                     try {
                         response = gson.toJson(taskManager.getEpicSubtasks(idInt));
-                    } catch (InMemoryTaskNotFoundException e) {
+                    } catch (TaskNotFoundException e) {
                         sendNotFound(exc, idInt);
                     }
                 }
@@ -68,14 +67,14 @@ public class EpicsHandler extends BaseHttpHandler {
                     try {
                         taskManager.deleteEpic(idInt);
                         response = "Задача " + TaskType.EPIC + " с id= " + idInt + " удалена";
-                    } catch (InMemoryTaskNotFoundException e) {
+                    } catch (TaskNotFoundException e) {
                         sendNotFound(exc, idInt);
                     }
                     sendText(exc, response, 200);
                 }
                 break;
             default:
-                response = "Метод не разрешен! Доступные методы: GET, POST, DELETE.";
+                response = "Метод не разрешен! Доступные методы для epics: GET, POST, DELETE.";
                 sendText(exc, response, 205);
         }
     }
