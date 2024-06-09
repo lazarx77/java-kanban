@@ -1,7 +1,8 @@
 package servers;
 
-import adapters.LocalDateTimeAdapter;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import service.HistoryManager;
@@ -11,15 +12,10 @@ import service.TaskManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BaseHttpHandler implements HttpHandler {
-
 
     protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     protected HistoryManager historyManager;
@@ -30,10 +26,7 @@ public class BaseHttpHandler implements HttpHandler {
     protected int idInt; // она же но в int
     protected InputStream inputStream;
     protected String body;
-    protected JsonElement jsonElement;
-    protected JsonObject jsonObject;
     protected String subtasksString = "";
-    //private static final List<String> URL_NAMES = List.of("tasks", "epics","subtasks", "history", "prioritized");
 
     protected final Gson gson = HttpTaskServer.getGson();
 
@@ -50,30 +43,23 @@ public class BaseHttpHandler implements HttpHandler {
         method = exc.getRequestMethod(); //вызываем метод запроса
         String path = exc.getRequestURI().getPath(); //получаем путь запроса
         String[] splitStrings = path.split("/"); //делим путь на составляющие
+        idString = "";
+        idInt = 0;
 
-//        if (URL_NAMES.contains(splitStrings[1])) {
-
-            idString = "";
-            idInt = 0;
-            if (splitStrings.length >= 3) { // получаем переданный в пути id задачи
-                idString = splitStrings[2];
-                try {
-                    idInt = Integer.parseInt(idString);
-                } catch (NumberFormatException e) {
-                    System.out.println(e.getMessage());
-                }
+        if (splitStrings.length >= 3) { // получаем переданный в пути id задачи
+            idString = splitStrings[2];
+            try {
+                idInt = Integer.parseInt(idString);
+            } catch (NumberFormatException e) {
+                System.out.println(e.getMessage());
             }
-            if (splitStrings.length == 4 && splitStrings[3].equals("subtasks")) {
-                subtasksString = splitStrings[3];
-            }
+        }
+        if (splitStrings.length == 4 && splitStrings[3].equals("subtasks")) {
+            subtasksString = splitStrings[3];
+        }
 
-            inputStream = exc.getRequestBody();
-            body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
-
-//        } else {
-//            response = "Недопустимый URL. Доступные URL: " + URL_NAMES;
-//            sendText(exc, response, 422);
-//        }
+        inputStream = exc.getRequestBody();
+        body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
     }
 
     protected void sendText(HttpExchange exc, String text, int code) throws IOException {

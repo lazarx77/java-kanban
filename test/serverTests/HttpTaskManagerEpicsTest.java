@@ -3,8 +3,6 @@ package serverTests;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Epic;
-import model.Task;
-import model.TaskStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +15,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,7 +43,6 @@ public class HttpTaskManagerEpicsTest {
     @Test
     public void testAddEpic() throws IOException {
         // создаём задачу
-
         Epic epic1 = new Epic();
         epic1.setTaskName("epic1_name");
         epic1.setDescription("epic1_description");
@@ -87,7 +82,7 @@ public class HttpTaskManagerEpicsTest {
 
     @Test
     public void testUpdateEpic() throws IOException {
-        // создаём задачу
+        // создаём задачи
         Epic epic1 = new Epic();
         epic1.setTaskName("epic1_name");
         epic1.setDescription("epic1_description");
@@ -104,7 +99,7 @@ public class HttpTaskManagerEpicsTest {
                     .POST(HttpRequest.BodyPublishers.ofString(epicJson1))
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            client.send(request, HttpResponse.BodyHandlers.ofString());
 
             Epic epic2 = new Epic();
             epic2.setTaskName("epic2_name");
@@ -119,7 +114,7 @@ public class HttpTaskManagerEpicsTest {
                     .POST(HttpRequest.BodyPublishers.ofString(epicJson2))
                     .build();
 
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            client.send(request, HttpResponse.BodyHandlers.ofString());
 
             //обновляем задачу
             Epic epic2Updated = new Epic();
@@ -136,7 +131,7 @@ public class HttpTaskManagerEpicsTest {
                     .POST(HttpRequest.BodyPublishers.ofString(epicJson3))
                     .build();
 
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             // проверяем код ответа
             assertEquals(201, response.statusCode());
 
@@ -233,7 +228,7 @@ public class HttpTaskManagerEpicsTest {
 
             assertNotNull(epicsFromJson, "Задачи не возвращаются");
             //проверяем количество созданных задач
-            assertEquals(1, epicsFromJson.size(), "Некорректное количество задач");
+            assertEquals(1, epicsFromJson.size(), "Некорректное количество эпик-задач");
             //проеряем обновление задачи
             assertEquals("epic1_name", epic.getTaskName(epic.getId()), "Некорректное имя задачи");
         } catch (InterruptedException e) {

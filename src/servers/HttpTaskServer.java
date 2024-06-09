@@ -4,7 +4,6 @@ import adapters.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
-
 import service.Managers;
 import service.TaskManager;
 
@@ -16,21 +15,21 @@ public class HttpTaskServer {
 
     private final int PORT = 8080;
     private static HttpServer server;
+
+    // содаем gson
     protected static final Gson gson = new GsonBuilder()
             .serializeNulls()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .create(); // завершаем построение gson
+            .create();
 
     public HttpTaskServer(TaskManager taskManager) throws IOException {
-
         server = HttpServer.create(new InetSocketAddress(PORT), 0);
         server.createContext("/tasks", new TasksHandler(taskManager));
         server.createContext("/epics", new EpicsHandler(taskManager));
         server.createContext("/subtasks", new SubtasksHandler(taskManager));
         server.createContext("/history", new HistoryHandler(taskManager));
         server.createContext("/prioritized", new PrioritizedHandler(taskManager));
-
     }
 
     public void start() {
@@ -43,7 +42,7 @@ public class HttpTaskServer {
         System.out.println("HTTP-сервер остановлен");
     }
 
-    public static Gson getGson(){
+    public static Gson getGson() {
         return gson;
     }
 
@@ -51,7 +50,7 @@ public class HttpTaskServer {
         TaskManager taskManager = Managers.getDefault();
         HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
         httpTaskServer.start();
-       // httpTaskServer.stop(5);
+        // httpTaskServer.stop(5); // заготовка для остановки сервера
     }
 }
 

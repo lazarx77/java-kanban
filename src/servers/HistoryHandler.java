@@ -3,7 +3,6 @@ package servers;
 import com.sun.net.httpserver.HttpExchange;
 import service.TaskManager;
 
-
 import java.io.IOException;
 
 public class HistoryHandler extends BaseHttpHandler {

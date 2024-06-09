@@ -4,7 +4,6 @@ import service.TaskType;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -50,7 +49,6 @@ public class Task {
 
     public void setDuration(Duration duration) {
         this.duration = duration.toMinutes();
-
     }
 
     public void setStartTime(LocalDateTime startTime) {

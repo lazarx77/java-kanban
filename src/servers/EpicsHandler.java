@@ -3,12 +3,10 @@ package servers;
 import com.sun.net.httpserver.HttpExchange;
 import exceptions.TaskNotFoundException;
 import model.Epic;
-
 import service.TaskManager;
 import service.TaskType;
 
 import java.io.IOException;
-
 
 public class EpicsHandler extends BaseHttpHandler {
 
@@ -49,7 +47,7 @@ public class EpicsHandler extends BaseHttpHandler {
                         sendNotFound(exc, idInt);
                     }
                 }
-                if (!subtasksString.isEmpty()){
+                if (!subtasksString.isEmpty()) {
                     try {
                         response = gson.toJson(taskManager.getEpicSubtasks(idInt));
                     } catch (TaskNotFoundException e) {

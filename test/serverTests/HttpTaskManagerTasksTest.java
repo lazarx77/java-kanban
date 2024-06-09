@@ -4,9 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Task;
 import model.TaskStatus;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import servers.HttpTaskServer;
 import service.Managers;
 import service.TaskManager;
@@ -125,7 +125,7 @@ public class HttpTaskManagerTasksTest {
                     .POST(HttpRequest.BodyPublishers.ofString(taskJson1))
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            client.send(request, HttpResponse.BodyHandlers.ofString());
 
             Task task2 = new Task();
             task2.setTaskName("task2_name");
@@ -150,7 +150,8 @@ public class HttpTaskManagerTasksTest {
             task1Updated.setDescription("task2_description");
             task1Updated.setStatus(TaskStatus.NEW);
             task1Updated.setDuration(Duration.ofMinutes(20));
-            task1Updated.setStartTime(LocalDateTime.of(2022, 12, 3, 10, 25, 0));
+            task1Updated.setStartTime(LocalDateTime.of(2022, 12, 3, 10, 25,
+                    0));
             String taskJson3 = gson.toJson(task1Updated);
 
             // создаём запрос на обновление задачи
@@ -162,7 +163,7 @@ public class HttpTaskManagerTasksTest {
                     .POST(HttpRequest.BodyPublishers.ofString(taskJson3))
                     .build();
 
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             // проверяем код ответа
             assertEquals(201, response.statusCode());
 
@@ -173,7 +174,8 @@ public class HttpTaskManagerTasksTest {
             task1NotUpdated.setDescription("task2_description");
             task1NotUpdated.setStatus(TaskStatus.NEW);
             task1NotUpdated.setDuration(Duration.ofMinutes(20));
-            task1NotUpdated.setStartTime(LocalDateTime.of(2022, 12, 2, 10, 25, 0));
+            task1NotUpdated.setStartTime(LocalDateTime.of(2022, 12, 2, 10, 25,
+                    0));
             String taskJson4 = gson.toJson(task1NotUpdated);
 
             // создаём запрос на обновление задачи
@@ -202,7 +204,7 @@ public class HttpTaskManagerTasksTest {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
             assertEquals(404, response.statusCode());
 
-            // проверяем, что создалась одна задача с корректным именем
+            // проверяем, что сохранилась обновленная задача с корректным именем
             List<Task> tasksFromManager = taskManager.getAllTasks();
             Task task = tasksFromManager.getFirst();
 
@@ -210,7 +212,8 @@ public class HttpTaskManagerTasksTest {
             //проверяем количество созданных задач
             assertEquals(2, tasksFromManager.size(), "Некорректное количество задач");
             //проеряем обновление задачи
-            assertEquals("task1_updated_name", task.getTaskName(task.getId()), "Некорректное имя задачи");
+            assertEquals("task1_updated_name", task.getTaskName(task.getId()), "Некорректное имя " +
+                    "задачи");
         } catch (InterruptedException e) {
             System.out.println("Во время выполнения запроса возникла ошибка. Проверьте, пожалуйста, URL-адрес и" +
                     " повторите попытку");
@@ -220,7 +223,7 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void testGetTask() throws IOException, InterruptedException {
+    public void testGetTask() throws IOException {
         // создаём задачу
         Task task1 = new Task();
         task1.setTaskName("task1_name");
@@ -345,7 +348,6 @@ public class HttpTaskManagerTasksTest {
 
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
             assertEquals(200, response.statusCode());
-
 
             //создаем запрос на получение всех задач
             url = URI.create("http://localhost:8080/tasks/");

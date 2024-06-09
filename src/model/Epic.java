@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    //private Integer id;
     private LocalDateTime endTime;
     private final List<Integer> subtasksIds = new ArrayList<>();
 
@@ -34,11 +33,9 @@ public class Epic extends Task {
         subtasksIds.remove(id);
     }
 
-
     public void clearSubtaskIds() {
         subtasksIds.clear();
     }
-
 
     public void setEndTime(LocalDateTime starTime) {
         endTime = starTime.plusMinutes(duration);

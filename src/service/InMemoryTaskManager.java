@@ -28,7 +28,6 @@ public class InMemoryTaskManager implements TaskManager {
         this.historyManager = Managers.getDefaultHistory();
     }
 
-
     // методы для создания задач
     @Override
     public Epic createNewEpic(Epic epic) {
@@ -44,7 +43,8 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask createNewSubtask(Subtask subtask) {
         int epicId = subtask.getEpicId();
         subtask.setId(id + 1);
-        Epic epic; epics.get(epicId);
+        Epic epic;
+        epics.get(epicId);
         if (epics.containsKey(epicId)) {
             epic = epics.get(epicId);
         } else {
@@ -259,8 +259,7 @@ public class InMemoryTaskManager implements TaskManager {
                             "пересечение задач по времени.");
                 }
             }
-            id++;
-            subtasks.put(id, subtask);
+            subtasks.put(subtask.getId(), subtask);
             int epicId = subtask.getEpicId();
             setEpicStatus(epicId);
             setEpicStart(epicId);
