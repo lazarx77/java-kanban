@@ -254,7 +254,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return result;
     }
 
-    //метод для получение строки из задачи
+    /*метод для получение строки из задачи*/
 
     public Task fromString(String string) {
         String[] split = string.split(",");
@@ -317,7 +317,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    //метод для загрузки данных из файла для работы менеджера
+    /*метод для загрузки данных из файла для работы менеджера*/
 
     public static FileBackedTaskManager loadFromFile(File file) {
 
@@ -341,23 +341,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             break;
                         case SUBTASK:
                             if (task.getStartTime() != null) {
-                                if (!middleFm.isTimeCross(task)) {
-                                    middleFm.prioritizedTasks.add((Subtask) task);
-                                } else {
+                                if (middleFm.isTimeCross(task)) {
                                     throw new TimeCrossException("Задача " + task.getId() + " не добавлена: " +
                                             "пересечение задач по времени.");
                                 }
+                                middleFm.prioritizedTasks.add((Subtask) task);
                             }
                             middleFm.subtasks.put(task.getId(), (Subtask) task);
                             break;
                         default:
                             if (task.getStartTime() != null) {
-                                if (!middleFm.isTimeCross(task)) {
-                                    middleFm.prioritizedTasks.add(task);
-                                } else {
+                                if (middleFm.isTimeCross(task)) {
                                     throw new TimeCrossException("Задача " + task.getId() + " не добавлена: " +
                                             "пересечение задач по времени.");
                                 }
+                                middleFm.prioritizedTasks.add(task);
                             }
                             middleFm.tasks.put(task.getId(), task);
                             break;

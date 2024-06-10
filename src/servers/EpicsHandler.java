@@ -10,6 +10,8 @@ import java.io.IOException;
 
 public class EpicsHandler extends BaseHttpHandler {
 
+    /*обработчик запросов epics */
+
     protected EpicsHandler(TaskManager taskManager) {
         super(taskManager);
     }
@@ -73,7 +75,7 @@ public class EpicsHandler extends BaseHttpHandler {
                 break;
             default:
                 response = "Метод не разрешен! Доступные методы для epics: GET, POST, DELETE.";
-                sendText(exc, response, 205);
+                sendText(exc, response, 405);
         }
     }
 }

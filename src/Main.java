@@ -32,7 +32,6 @@ public class Main {
         task2.setStatus(TaskStatus.IN_PROGRESS);
         task2.setStartTime(LocalDateTime.of(2024, 12, 10, 10, 10));
         task2.setDuration(Duration.ofMinutes(20));
-//        task2 = taskManager.createNewTask(task2);
 
         Epic epic1 = new Epic(); // id 3
         epic1.setTaskName("epic1_name");
@@ -84,7 +83,6 @@ public class Main {
         System.out.println(historyManager.getHistory());
         taskManager.deleteTaskById(1);
         System.out.println(historyManager.getHistory());
-        //taskManager.deleteEpic(3);
         taskManager.deleteSubtask(4);
         taskManager.getEpicById(6);
         System.out.println(historyManager.getHistory());

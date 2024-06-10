@@ -50,7 +50,6 @@ public class HttpTaskServer {
         TaskManager taskManager = Managers.getDefault();
         HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
         httpTaskServer.start();
-        // httpTaskServer.stop(5); // заготовка для остановки сервера
     }
 }
 

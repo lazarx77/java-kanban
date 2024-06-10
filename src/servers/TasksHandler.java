@@ -11,6 +11,8 @@ import java.io.IOException;
 
 public class TasksHandler extends BaseHttpHandler {
 
+    /*обработчик запросов tasks */
+
     protected TasksHandler(TaskManager taskManager) {
         super(taskManager);
     }

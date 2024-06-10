@@ -15,6 +15,8 @@ import java.nio.charset.StandardCharsets;
 
 public class BaseHttpHandler implements HttpHandler {
 
+    /* предварительный обработччик http запросов, из которого остальные обработчки далее принимают метод, тело запроса
+     * и запрашиваемый id задачи */
     protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     protected HistoryManager historyManager;
     protected TaskManager taskManager;
@@ -42,7 +44,6 @@ public class BaseHttpHandler implements HttpHandler {
         String path = exc.getRequestURI().getPath(); //получаем путь запроса
         String[] splitStrings = path.split("/"); //делим путь на составляющие
         idString = "";
-        idInt = 0;
 
         if (splitStrings.length >= 3) { // получаем переданный в пути id задачи
             idString = splitStrings[2];
@@ -55,7 +56,6 @@ public class BaseHttpHandler implements HttpHandler {
         if (splitStrings.length == 4 && splitStrings[3].equals("subtasks")) {
             subtasksString = splitStrings[3];
         }
-
         inputStream = exc.getRequestBody();
         body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
     }

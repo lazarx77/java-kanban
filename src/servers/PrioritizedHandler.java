@@ -7,6 +7,8 @@ import java.io.IOException;
 
 public class PrioritizedHandler extends BaseHttpHandler {
 
+    /*обработчик запросов prioritized */
+
     protected PrioritizedHandler(TaskManager taskManager) {
         super(taskManager);
     }

@@ -11,6 +11,8 @@ import java.io.IOException;
 
 public class SubtasksHandler extends BaseHttpHandler {
 
+    /*обработчик запросов subtasks */
+
     protected SubtasksHandler(TaskManager taskManager) {
         super(taskManager);
     }
