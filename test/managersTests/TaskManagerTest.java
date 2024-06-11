@@ -1,3 +1,6 @@
+package managersTests;
+
+import exceptions.TimeCrossException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -6,7 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.Managers;
 import service.TaskManager;
-import service.TimeCrossException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -16,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 abstract class TaskManagerTest {
 
-    public static TaskManager taskManager = Managers.getDefault();
+    public static TaskManager taskManager;
     protected Task task1; // id 1
     protected Task task2; // = new Task(); // id 2
     protected Task task3; // id 3
@@ -150,8 +152,9 @@ abstract class TaskManagerTest {
         assertEquals("subtask2_name", subtask2.getTaskName(6));
         assertEquals("epic4_name", epic4.getTaskName(10));
         assertEquals("subtask5_name", subtask5.getTaskName(12));
-        String epic1String = "Epic{id='4 , taskName= epic1_name , description.length=17, startTime= 01.12.2022 - " +
-                "12:25, duration= 20, status=IN_PROGRESS subtasksIds= [5, 6]}";
+        String epic1String = "Epic{id='4 , taskName= epic1_name , description.length=17, startTime=" +
+                " 01.12.2022 - 12:25, duration= 20, status=IN_PROGRESS subtasksIds= [5, 6], " +
+                "endTime= 01.12.2022 - 13:05}";
         assertEquals(epic1String, taskManager.getEpicById(4).toString());
     }
 

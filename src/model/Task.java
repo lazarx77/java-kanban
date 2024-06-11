@@ -7,14 +7,25 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+/**
+ * Класс задач
+ * от этого класса наследуют поля и методы эпик-задачи и подзадачи
+ * хранит поля: id - порядковый номер создаваемой задачи;
+ * taskName - имя задачи;
+ * status - статус задачи (значение получает из класса TaskStatus;
+ * duration - длительность задачи;
+ * startTime - время и дата начала задачи.
+ * Введено поле formatter для форматирования даты и времени задач.
+ */
+
 public class Task {
 
-    private Integer id;
-    private String taskName;
-    private String description;
-    private TaskStatus status;
-    long duration; //может быть равным null
-    LocalDateTime startTime; //может быть равным null
+    protected Integer id;
+    protected String taskName;
+    protected String description;
+    protected TaskStatus status;
+    protected long duration;
+    protected LocalDateTime startTime;
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy - HH:mm");
 
     @Override
@@ -48,15 +59,11 @@ public class Task {
     }
 
     public void setDuration(Duration duration) {
-        if (duration != null) {
-            this.duration = duration.toMinutes();
-        }
+        this.duration = duration.toMinutes();
     }
 
     public void setStartTime(LocalDateTime startTime) {
-        if (startTime != null) {
-            this.startTime = startTime;
-        }
+        this.startTime = startTime;
     }
 
     public LocalDateTime getStartTime() {

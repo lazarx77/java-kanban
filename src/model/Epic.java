@@ -6,14 +6,23 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс эпик-задач
+ * введены дополнительные поля endTime для расчитываемого времени окончания эпик-задачи,
+ * subtasksIds для хранения id водзадач, которые относятся к конкретной эпик-задаче
+ */
+
 public class Epic extends Task {
-    private Integer id;
     private LocalDateTime endTime;
     private final List<Integer> subtasksIds = new ArrayList<>();
 
     @Override
     public LocalDateTime getEndTime() {
-        endTime = super.getEndTime();
+        if (startTime != null) {
+            endTime = startTime.plus(getDuration());
+        } else {
+            endTime = null;
+        }
         return endTime;
     }
 
@@ -30,11 +39,9 @@ public class Epic extends Task {
         subtasksIds.remove(id);
     }
 
-
     public void clearSubtaskIds() {
         subtasksIds.clear();
     }
-
 
     public void setEndTime(LocalDateTime starTime) {
         endTime = starTime.plusMinutes(duration);
@@ -53,10 +60,10 @@ public class Epic extends Task {
     public String toString() {
 
         String result = "Epic{" +
-                "id='" + getId() + " " +
-                ", taskName= " + getTaskName(getId()) + " ";
-        if (getDescription() != null) {
-            result = result + ", description.length=" + getDescription().length();
+                "id='" + id + " " +
+                ", taskName= " + taskName + " ";
+        if (description != null) {
+            result = result + ", description.length=" + description.length();
         } else {
             result = result + ", extraInfo=null";
         }
@@ -70,7 +77,12 @@ public class Epic extends Task {
         } else {
             result = result + ", duration= null";
         }
-        result = result + ", status=" + getStatus() + " " + "subtasksIds= " + subtasksIds;
+        result = result + ", status=" + status + " " + "subtasksIds= " + subtasksIds;
+        if (endTime != null) {
+            result = result + ", endTime= " + endTime.format(formatter);
+        } else {
+            result = result + ", endTime= null";
+        }
         return result + '}';
     }
 }

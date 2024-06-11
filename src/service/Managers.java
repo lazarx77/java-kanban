@@ -1,5 +1,10 @@
 package service;
 
+/**
+ * Класс для удобного вызова менеджеров по обработке задач.
+ * Предосталяет методы для получения экземпляров TaskManager, HistoryManager , FileBackedTaskManager.
+ */
+
 public final class Managers {
 
     private static TaskManager taskManager;

@@ -1,8 +1,11 @@
-package service;
+package exceptions;
+
+/**
+ * Исключение для пересечения задач по времени
+ */
 
 public class TimeCrossException extends RuntimeException {
 
-    //исключение для пересечения задач по времени
     public TimeCrossException(final String message) {
         super(message);
     }

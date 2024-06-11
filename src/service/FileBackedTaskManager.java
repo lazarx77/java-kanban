@@ -1,5 +1,7 @@
 package service;
 
+import exceptions.ManagerSaveException;
+import exceptions.TimeCrossException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -10,6 +12,14 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+/**
+ * Класс для файлового менеджера.
+ * Предоставляет методы для сохранения в файл задач. Наследует методы и поля от InMemoryTaskManager.
+ * Хранит пола:
+ * loadFile - указание пути файла, из которого можно восстановить (загрузить задачи) состояние задач в менеджере;
+ * SAVE_FILE - указание пути файла для сохранения задач;
+ * CSV_HEADER - строка, описыващая "шапку" для таблицы сохранения задач в файл;
+ */
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -252,7 +262,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return result;
     }
 
-    //метод для получение строки из задачи
+    /*метод для получение строки из задачи*/
 
     public Task fromString(String string) {
         String[] split = string.split(",");
@@ -315,7 +325,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    //метод для загрузки данных из файла для работы менеджера
+    /*метод для загрузки данных из файла для работы менеджера*/
 
     public static FileBackedTaskManager loadFromFile(File file) {
 
@@ -339,23 +349,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                             break;
                         case SUBTASK:
                             if (task.getStartTime() != null) {
-                                if (!middleFm.isTimeCross(task)) {
-                                    middleFm.prioritizedTasks.add((Subtask) task);
-                                } else {
+                                if (middleFm.isTimeCross(task)) {
                                     throw new TimeCrossException("Задача " + task.getId() + " не добавлена: " +
                                             "пересечение задач по времени.");
                                 }
+                                middleFm.prioritizedTasks.add((Subtask) task);
                             }
                             middleFm.subtasks.put(task.getId(), (Subtask) task);
                             break;
                         default:
                             if (task.getStartTime() != null) {
-                                if (!middleFm.isTimeCross(task)) {
-                                    middleFm.prioritizedTasks.add(task);
-                                } else {
+                                if (middleFm.isTimeCross(task)) {
                                     throw new TimeCrossException("Задача " + task.getId() + " не добавлена: " +
                                             "пересечение задач по времени.");
                                 }
+                                middleFm.prioritizedTasks.add(task);
                             }
                             middleFm.tasks.put(task.getId(), task);
                             break;
