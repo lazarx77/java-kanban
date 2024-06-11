@@ -7,6 +7,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+/**
+ * Класс задач
+ * от этого класса наследуют поля и методы эпик-задачи и подзадачи
+ * хранит поля: id - порядковый номер создаваемой задачи;
+ * taskName - имя задачи;
+ * status - статус задачи (значение получает из класса TaskStatus;
+ * duration - длительность задачи;
+ * startTime - время и дата начала задачи.
+ * Введено поле formatter для форматирования даты и времени задач.
+ */
+
 public class Task {
 
     protected Integer id;

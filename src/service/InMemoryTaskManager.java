@@ -11,6 +11,17 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
+/**
+ * Класс для менеджера задач, работающий в памяти.
+ * Реализовывает методы TaskManager.
+ * Хранит поля:
+ * id - расчитываемые id задач;
+ * tasks - таблица для хранения задач;
+ * subtasks - таблица для хранения подзадач;
+ * epics - таблица для хранения эпи-задач;
+ * prioritizedTasks - коллекция приоритетных задач, хранящая задачи в порядке их начального времени;
+ */
+
 public class InMemoryTaskManager implements TaskManager {
 
     protected int id = 0;

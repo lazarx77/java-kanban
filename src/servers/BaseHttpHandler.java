@@ -13,17 +13,29 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Класс для предварительноой обработки http запросов, из которого остальные обработчки далее принимают метод,
+ * тело запроса и запрашиваемый id задачи.
+ * Хранит поля:
+ * response - http ответ;
+ * method - http метод;
+ * idString - id задачи из пути запроса в String;
+ * idInt - id задачи в int;
+ * inputStream - входящий поток;
+ * body - тело http заппроса;
+ * subtasksString - временное поле для реализации логики обрадотки получения подзадач в EpicsHandler;
+ * gson - экземпляр gson, получаемый из HttpTaskServer
+ */
+
 public class BaseHttpHandler implements HttpHandler {
 
-    /* предварительный обработччик http запросов, из которого остальные обработчки далее принимают метод, тело запроса
-     * и запрашиваемый id задачи */
     protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     protected HistoryManager historyManager;
     protected TaskManager taskManager;
-    protected String response; //поле для хранения ответа
-    protected String method; //поле для хранения вызываемого метода Http
-    protected String idString; //переменная для получения id задачи из пути запроса
-    protected int idInt; // она же но в int
+    protected String response;
+    protected String method;
+    protected String idString;
+    protected int idInt;
     protected InputStream inputStream;
     protected String body;
     protected String subtasksString = "";

@@ -6,6 +6,12 @@ import model.Task;
 
 import java.util.List;
 
+/**
+ * Интерфейс для менеджера задач.
+ * Описывает все основные методы по обработаке задач.
+ * Методы реализованы в InMemoryTaskManager.
+ */
+
 public interface TaskManager {
 
     Epic createNewEpic(Epic epic);

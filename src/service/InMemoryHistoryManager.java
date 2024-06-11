@@ -7,6 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Класс для менеджера истории, работающий в памяти.
+ * Реализовывает методы по обработке истории задач.
+ * Хранит поля:
+ * historyList - связанный список задач для истории задач;
+ * history - таблица задач для истории задач.
+ */
+
 public class InMemoryHistoryManager implements HistoryManager {
 
     private CustomLinkedList<Task> historyList = new CustomLinkedList<>();

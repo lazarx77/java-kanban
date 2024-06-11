@@ -10,7 +10,9 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/*создаем адаптер для gson-json*/
+/**
+ * Создаем адаптер формата даты и времени для gson-json
+ */
 public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
     private static final DateTimeFormatter dtf = Task.formatter;
 

@@ -6,6 +6,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс эпик-задач
+ * введены дополнительные поля endTime для расчитываемого времени окончания эпик-задачи,
+ * subtasksIds для хранения id водзадач, которые относятся к конкретной эпик-задаче
+ */
+
 public class Epic extends Task {
     private LocalDateTime endTime;
     private final List<Integer> subtasksIds = new ArrayList<>();

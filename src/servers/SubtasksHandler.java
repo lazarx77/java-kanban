@@ -9,9 +9,11 @@ import service.TaskType;
 
 import java.io.IOException;
 
-public class SubtasksHandler extends BaseHttpHandler {
+/**
+ * Обработчик запросов subtasks
+ */
 
-    /*обработчик запросов subtasks */
+public class SubtasksHandler extends BaseHttpHandler {
 
     protected SubtasksHandler(TaskManager taskManager) {
         super(taskManager);

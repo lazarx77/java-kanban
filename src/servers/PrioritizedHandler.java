@@ -5,9 +5,11 @@ import service.TaskManager;
 
 import java.io.IOException;
 
-public class PrioritizedHandler extends BaseHttpHandler {
+/**
+ * Обработчик http запросов prioritized
+ */
 
-    /*обработчик запросов prioritized */
+public class PrioritizedHandler extends BaseHttpHandler {
 
     protected PrioritizedHandler(TaskManager taskManager) {
         super(taskManager);

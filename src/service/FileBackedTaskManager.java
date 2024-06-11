@@ -12,6 +12,14 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+/**
+ * Класс для файлового менеджера.
+ * Предоставляет методы для сохранения в файл задач. Наследует методы и поля от InMemoryTaskManager.
+ * Хранит пола:
+ * loadFile - указание пути файла, из которого можно восстановить (загрузить задачи) состояние задач в менеджере;
+ * SAVE_FILE - указание пути файла для сохранения задач;
+ * CSV_HEADER - строка, описыващая "шапку" для таблицы сохранения задач в файл;
+ */
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 

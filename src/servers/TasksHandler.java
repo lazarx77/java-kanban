@@ -9,9 +9,11 @@ import service.TaskType;
 
 import java.io.IOException;
 
-public class TasksHandler extends BaseHttpHandler {
+/**
+ * Обработчик http запросов tasks
+ */
 
-    /*обработчик запросов tasks */
+public class TasksHandler extends BaseHttpHandler {
 
     protected TasksHandler(TaskManager taskManager) {
         super(taskManager);

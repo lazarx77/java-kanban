@@ -11,6 +11,12 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.time.LocalDateTime;
 
+/**
+ * Класс для сервера.
+ * Хранит и инициализирует gson с нужным форматированием, предоставляет методы для запуска и остановки сервера,
+ * связывает URL /tasks, /epics, /subtasks, /history, /prioritized с соответствующими обработчиками http запросов
+ */
+
 public class HttpTaskServer {
 
     private static final int PORT = 8080;

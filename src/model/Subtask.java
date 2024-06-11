@@ -2,6 +2,11 @@ package model;
 
 import service.TaskType;
 
+/**
+ * Класс подзадач
+ * введено дополнительное поле epicId для хранения id эпик-задачи, к которой относится конкретная подзадача
+ */
+
 public class Subtask extends Task {
     private int epicId;
 

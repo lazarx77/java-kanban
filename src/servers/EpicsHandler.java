@@ -8,9 +8,11 @@ import service.TaskType;
 
 import java.io.IOException;
 
-public class EpicsHandler extends BaseHttpHandler {
+/**
+ * Класс обработчика запросов epics
+ */
 
-    /*обработчик запросов epics */
+public class EpicsHandler extends BaseHttpHandler {
 
     protected EpicsHandler(TaskManager taskManager) {
         super(taskManager);
